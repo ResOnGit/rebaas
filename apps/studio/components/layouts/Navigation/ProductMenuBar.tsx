@@ -35,7 +35,7 @@ export const ProductMenuBar = ({
       <ProductMenuBarHeader>
         {header ?? (
           <>
-            <h4 className="text-sm truncate min-w-0 flex-1">{title}</h4>
+            <h4 className="text-base font-medium truncate min-w-0 flex-1">{title}</h4>
             {titleBadge}
           </>
         )}

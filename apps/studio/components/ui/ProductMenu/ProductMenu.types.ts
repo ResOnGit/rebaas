@@ -31,6 +31,8 @@ export interface ProductMenuGroupItem {
   pages?: string[]
   shortcutId?: ShortcutId
   isLoading?: boolean
+  /** Runs instead of navigation when `url` is empty. */
+  onSelect?: () => void
 }
 
 /**

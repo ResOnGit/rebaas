@@ -15,7 +15,6 @@ import { HomeIcon } from './HomeIcon'
 import { LocalVersionPopover } from './LocalVersionPopover'
 import { MergeRequestButton } from './MergeRequestButton'
 import { ConnectButton } from '@/components/interfaces/ConnectButton/ConnectButton'
-import { ConnectSheet } from '@/components/interfaces/ConnectSheet/ConnectSheet'
 import { LocalDropdown } from '@/components/interfaces/LocalDropdown'
 import { UserDropdown } from '@/components/interfaces/UserDropdown'
 import { AdvisorButton } from '@/components/layouts/AppLayout/AdvisorButton'
@@ -101,7 +100,7 @@ export const LayoutHeader = ({
 
   return (
     <>
-      <header className="hidden md:flex h-11 md:h-12 items-center shrink-0 border-b">
+      <header className="hidden md:flex h-16 items-center shrink-0 border-b">
         {backToDashboardURL && isAccountPage && (
           <div className="flex items-center justify-center border-r flex-0 md:hidden h-full aspect-square">
             <Link
@@ -288,8 +287,6 @@ export const LayoutHeader = ({
           </div>
         </div>
       </header>
-
-      <ConnectSheet />
     </>
   )
 }

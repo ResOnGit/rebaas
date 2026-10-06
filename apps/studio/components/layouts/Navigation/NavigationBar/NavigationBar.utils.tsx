@@ -9,7 +9,7 @@ import {
   Storage,
   TableEditor,
 } from 'icons'
-import { Blocks, Lightbulb, List, Settings, Telescope } from 'lucide-react'
+import { Blocks, BookOpen, Lightbulb, List, Plug, Settings, Telescope } from 'lucide-react'
 
 import {
   useIsExplorerEnabled,
@@ -54,6 +54,35 @@ function getRouteContext(ref?: string, project?: Project): RouteContext {
     isProjectActive: project?.status === PROJECT_STATUS.ACTIVE_HEALTHY,
     isProjectBuilding: project?.status === PROJECT_STATUS.COMING_UP,
     buildingUrl: `/project/${ref}`,
+  }
+}
+
+export const useGenerateConnectRoute = (): Route | null => {
+  const { ref } = useParams()
+  const { data: project } = useSelectedProjectQuery()
+  const { isProjectActive, isProjectBuilding, buildingUrl } = getRouteContext(ref, project)
+
+  if (!ref) return null
+
+  return {
+    key: 'connect',
+    label: 'Connect',
+    disabled: !isProjectActive,
+    icon: <Plug className="rotate-90" size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
+    link: isProjectBuilding ? buildingUrl : `/project/${ref}/connect`,
+    shortcutId: SHORTCUT_IDS.CONNECT_OPEN_SHEET,
+  }
+}
+
+export const useGenerateHow2Route = (): Route | null => {
+  const { ref } = useParams()
+  if (!ref) return null
+
+  return {
+    key: 'how-2',
+    label: 'how 2',
+    icon: <BookOpen size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
+    link: `/project/${ref}/how-2`,
   }
 }
 

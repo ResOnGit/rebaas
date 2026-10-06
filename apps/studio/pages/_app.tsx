@@ -22,7 +22,6 @@ import {
   ThemeProvider,
   useThemeSandbox,
 } from 'common'
-import MetaFaviconsPagesRouter from 'common/MetaFavicons/pages-router'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import duration from 'dayjs/plugin/duration'
@@ -33,7 +32,7 @@ import { DevToolbar, DevToolbarProvider, DevToolbarTrigger, type ExtraTab } from
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { NuqsAdapter } from 'nuqs/adapters/next/pages'
-import { ErrorInfo, useCallback, useEffect, useState, type ComponentProps } from 'react'
+import { ErrorInfo, useCallback, useEffect, type ComponentProps } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { TooltipProvider } from 'ui'
 import { TimestampInfoProvider } from 'ui-patterns/TimestampInfo'
@@ -51,7 +50,6 @@ import { BannerStackProvider } from '@/components/ui/BannerStack/BannerStackProv
 import { clearBootTimeoutFallback } from '@/components/ui/BootTimeoutFallback/BootTimeoutFallback'
 import { GlobalErrorBoundaryState } from '@/components/ui/ErrorBoundary/GlobalErrorBoundaryState'
 import { GlobalShortcuts } from '@/components/ui/GlobalShortcuts/GlobalShortcuts'
-import { getCLIReleaseVersion } from '@/data/misc/cli-release-version-query'
 import { useRootQueryClient } from '@/data/query-client'
 import { inter, manrope, sourceCodePro } from '@/fonts'
 import { useCustomContent } from '@/hooks/custom-content/useCustomContent'
@@ -139,8 +137,6 @@ configureMonacoLoader()
 function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
   const queryClient = useRootQueryClient()
   const { appTitle } = useCustomContent(['app:title'])
-  const [isCLI, setIsCLI] = useState(false)
-
   const getLayout = Component.getLayout ?? ((page) => page)
 
   const errorBoundaryHandler = (error: Error, _info: ErrorInfo) => {
@@ -163,18 +159,6 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
   }, [])
 
   const isTestEnv = process.env.NEXT_PUBLIC_NODE_ENV === 'test'
-
-  // [Joshen] Should target hosted staging, local dev, and local CLI only
-  const isNonProdEnv = (IS_PLATFORM && process.env.NEXT_PUBLIC_ENVIRONMENT !== 'prod') || isCLI
-
-  const checkCliEnvironment = async () => {
-    const data = await getCLIReleaseVersion()
-    if (!!data.current) setIsCLI(true)
-  }
-
-  useEffect(() => {
-    if (!IS_PLATFORM) checkCliEnvironment()
-  }, [])
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -205,12 +189,21 @@ function CustomApp({ Component, pageProps }: AppPropsWithLayout) {
                             crossOrigin="use-credentials"
                           />
                         )}
+                        <link
+                          rel="shortcut icon"
+                          type="image/png"
+                          href={`${BASE_PATH}/img/rebaas-logo.png`}
+                        />
+                        <link
+                          rel="icon"
+                          type="image/png"
+                          href={`${BASE_PATH}/img/rebaas-logo.png`}
+                          sizes="any"
+                        />
+                        <link rel="apple-touch-icon" href={`${BASE_PATH}/img/rebaas-logo.png`} />
+                        <meta name="application-name" content="REBAAS" />
+                        <meta name="theme-color" content="#1E1E1E" />
                       </Head>
-                      <MetaFaviconsPagesRouter
-                        includeManifest
-                        applicationName="Supabase Studio"
-                        route={isNonProdEnv ? '/favicon/staging' : '/favicon'}
-                      />
                       <TooltipProvider>
                         <RouteValidationWrapper>
                           <ThemeProvider>

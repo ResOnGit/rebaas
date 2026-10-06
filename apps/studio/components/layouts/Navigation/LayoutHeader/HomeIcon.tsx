@@ -38,14 +38,14 @@ export const HomeIcon = ({ className }: { className?: string }) => {
           tabIndex={0}
         >
           <img
-            alt="Supabase"
-            src={`${router.basePath}/img/supabase-logo.svg`}
-            className={largeLogo ? 'h-[20px]' : 'h-[18px]'}
+            alt="REBAAS"
+            src={`${router.basePath}/img/rebaas-logo.png`}
+            className={largeLogo ? 'h-8' : 'h-7'}
           />
-          <span className="sr-only">Back to organization home</span>
+          <span className="sr-only">Back to home</span>
         </Link>
       </TooltipTrigger>
-      <TooltipContent aria-hidden>Back to organization home</TooltipContent>
+      <TooltipContent aria-hidden>Back to home</TooltipContent>
     </Tooltip>
   )
 }

@@ -43,6 +43,7 @@ import { RestoringState } from './RestoringState'
 import { UnhealthyState } from './UnhealthyState'
 import { UpgradingState } from './UpgradingState'
 import { CreateBranchModal } from '@/components/interfaces/BranchManagement/CreateBranchModal'
+import { ConnectGlobalHandlers } from '@/components/interfaces/ConnectSheet/ConnectGlobalHandlers'
 import { ProjectAPIDocs } from '@/components/interfaces/ProjectAPIDocs/ProjectAPIDocs'
 import { BannerExplorer } from '@/components/ui/BannerStack/Banners/BannerExplorer'
 import { BannerFreeMicroUpgrade } from '@/components/ui/BannerStack/Banners/BannerFreeMicroUpgrade'
@@ -56,7 +57,7 @@ import { useLocalStorageQuery } from '@/hooks/misc/useLocalStorage'
 import { useSelectedOrganizationQuery } from '@/hooks/misc/useSelectedOrganization'
 import { useSelectedProjectQuery } from '@/hooks/misc/useSelectedProject'
 import { withAuth } from '@/hooks/misc/withAuth'
-import { PROJECT_STATUS } from '@/lib/constants'
+import { IS_PLATFORM, PROJECT_STATUS } from '@/lib/constants'
 import { MANAGED_BY } from '@/lib/constants/infrastructure'
 import { buildStudioPageTitle } from '@/lib/page-title'
 import { getPathnameWithoutQuery } from '@/lib/pathname.utils'
@@ -198,7 +199,8 @@ export const ProjectLayout = forwardRef<HTMLDivElement, PropsWithChildren<Projec
 
     const editor = useEditorType()
     const forceShowProductMenu = editor === undefined
-    const sideBarIsOpen = (forceShowProductMenu || showSidebar) && !isMobile
+    const sideBarIsOpen =
+      (forceShowProductMenu || showSidebar) && (!isMobile || !IS_PLATFORM)
 
     const panelRef = usePanelRef()
 
@@ -397,6 +399,7 @@ export const ProjectLayout = forwardRef<HTMLDivElement, PropsWithChildren<Projec
           </ResizablePanelGroup>
         </div>
         <CreateBranchModal />
+        <ConnectGlobalHandlers />
         <ProjectAPIDocs />
       </>
     )

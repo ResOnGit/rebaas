@@ -1,6 +1,6 @@
 import { useBreakpoint, useFlag, useParams } from 'common'
 import { useRouter } from 'next/router'
-import { PropsWithChildren, useEffect, useState } from 'react'
+import { CSSProperties, PropsWithChildren, useEffect, useState } from 'react'
 import { ResizablePanel, ResizablePanelGroup, SidebarProvider, usePanelRef } from 'ui'
 import { SkipToContent } from 'ui-patterns/SkipToContent'
 
@@ -93,7 +93,12 @@ export const DefaultLayout = ({
   }
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider
+      defaultOpen={!IS_PLATFORM}
+      style={
+        !IS_PLATFORM ? ({ '--sidebar-width': '18rem' } as CSSProperties) : undefined
+      }
+    >
       <LayoutSidebarProvider>
         <ProjectContextProvider projectRef={ref}>
           <MobileSheetProvider>
@@ -101,16 +106,18 @@ export const DefaultLayout = ({
               <SkipToContent href="#main" />
               {/* Top Banner */}
               <AppBannerWrapper />
-              <div className="shrink-0">
-                {isMobile && (
-                  <MobileNavigationBar
-                    hideMobileMenu={hideMobileMenu}
-                    backToDashboardURL={backToDashboardURL}
-                  />
-                )}
-                <LayoutHeader headerTitle={headerTitle} backToDashboardURL={backToDashboardURL} />
-                {showConfigDrift && ref && <GitHubConfigDriftBanner />}
-              </div>
+              {IS_PLATFORM && (
+                <div className="shrink-0">
+                  {isMobile && (
+                    <MobileNavigationBar
+                      hideMobileMenu={hideMobileMenu}
+                      backToDashboardURL={backToDashboardURL}
+                    />
+                  )}
+                  <LayoutHeader headerTitle={headerTitle} backToDashboardURL={backToDashboardURL} />
+                  {showConfigDrift && ref && <GitHubConfigDriftBanner />}
+                </div>
+              )}
               {/* Main Content Area */}
               <div className="flex flex-1 w-full overflow-y-hidden">
                 {/* Sidebar - Only show for project pages, not account pages */}

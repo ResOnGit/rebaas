@@ -156,7 +156,7 @@
   --sidebar-accent-foreground: var(--foreground-default);
   --sidebar-border: var(--border-default);
   --sidebar-ring: var(--ring);
-  --header-height: 3rem;
+  --header-height: 4rem;
 }
 
 [data-theme='dark'],
@@ -453,4 +453,29 @@ div[data-radix-portal]:not(.portal--toast) {
 strong,
 b {
   @apply font-bold;
+}
+
+/* REBAAS: amethyst accent. --hue tints surfaces and primary; brand literals stay green unless overridden. */
+[data-theme='dark'],
+.dark {
+  --hue: 300;
+  --chroma: 0.032;
+  --brand-default: 292deg 62% 64%;
+  --brand-600: 292deg 55% 76%;
+  --brand-500: 292deg 70% 28%;
+  --brand-400: 292deg 65% 16%;
+  --brand-300: 292deg 50% 12%;
+  --brand-200: 292deg 40% 8%;
+}
+
+[data-theme='light'],
+.light {
+  --hue: 300;
+  --chroma: 0.014;
+  --brand-default: 292deg 55% 46%;
+  --brand-600: 292deg 68% 32%;
+  --brand-500: 292deg 60% 40%;
+  --brand-400: 292deg 62% 68%;
+  --brand-300: 292deg 68% 82%;
+  --brand-200: 292deg 72% 92%;
 }

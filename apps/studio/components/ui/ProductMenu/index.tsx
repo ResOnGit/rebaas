@@ -21,7 +21,7 @@ export const ProductMenu = ({ page, menu, onItemClick }: ProductMenuProps) => {
                 <Menu.Group
                   title={
                     group.title ? (
-                      <div className="flex flex-col space-y-2 uppercase font-mono">
+                      <div className="flex flex-col space-y-2 text-xs font-medium tracking-wide">
                         <span>{group.title}</span>
                         {group.isPreview && <Badge variant="warning">Not production ready</Badge>}
                       </div>
@@ -40,7 +40,10 @@ export const ProductMenu = ({ page, menu, onItemClick }: ProductMenuProps) => {
                         item={item}
                         isActive={isActive}
                         target={item.isExternal ? '_blank' : '_self'}
-                        onClick={onItemClick}
+                        onClick={() => {
+                          item.onSelect?.()
+                          onItemClick?.()
+                        }}
                       />
                     )
                   })}

@@ -32,7 +32,12 @@ export const ProductMenuItem = ({
   } = item
 
   const menuItem = (
-    <Menu.Item icon={icon} active={isActive} onClick={onClick}>
+    <Menu.Item
+      className="py-1.5 font-medium"
+      icon={icon}
+      active={isActive}
+      onClick={onClick}
+    >
       <div className="flex w-full items-center justify-between gap-1">
         <div
           className="flex items-center gap-1 min-w-0 flex-1"

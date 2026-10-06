@@ -16,6 +16,8 @@ import { ICON_SIZE, ICON_STROKE_WIDTH } from '@/components/interfaces/Sidebar'
 import {
   generateProductRoutes,
   generateSettingsRoutes,
+  useGenerateConnectRoute,
+  useGenerateHow2Route,
   useGenerateOtherRoutes,
   useGenerateToolRoutes,
 } from '@/components/layouts/Navigation/NavigationBar/NavigationBar.utils'
@@ -67,6 +69,8 @@ export function MobileMenuContent({
   const authOverviewPageEnabled = useFlag('authOverviewPage')
   const computeEnabled = useFlag('compute')
 
+  const connectRoute = useGenerateConnectRoute()
+  const how2Route = useGenerateHow2Route()
   const toolRoutes = useGenerateToolRoutes()
   const productRoutes = useMemo(
     () =>
@@ -103,8 +107,17 @@ export function MobileMenuContent({
   )
 
   const allTopLevelRoutes = useMemo(
-    () => [homeRoute, ...toolRoutes, ...productRoutes, ...otherRoutes, ...settingsRoutes],
-    [homeRoute, toolRoutes, productRoutes, otherRoutes, settingsRoutes]
+    () =>
+      [
+        homeRoute,
+        ...(connectRoute ? [connectRoute] : []),
+        ...(how2Route ? [how2Route] : []),
+        ...toolRoutes,
+        ...productRoutes,
+        ...otherRoutes,
+        ...settingsRoutes,
+      ],
+    [homeRoute, connectRoute, how2Route, toolRoutes, productRoutes, otherRoutes, settingsRoutes]
   )
 
   const { sectionKey: sectionKeyToShow, sectionLabel } = resolveSectionDisplay({

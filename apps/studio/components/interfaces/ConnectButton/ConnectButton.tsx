@@ -1,8 +1,8 @@
 import { Plug } from 'lucide-react'
-import { parseAsBoolean, useQueryState } from 'nuqs'
 import { ComponentProps } from 'react'
 import { Button, cn } from 'ui'
 
+import { useNavigateToConnect } from '@/components/interfaces/ConnectSheet/useNavigateToConnect'
 import { ButtonTooltip } from '@/components/ui/ButtonTooltip'
 import { ShortcutTooltip } from '@/components/ui/ShortcutTooltip'
 import { useSelectedProjectQuery } from '@/hooks/misc/useSelectedProject'
@@ -24,21 +24,13 @@ export const ConnectButton = ({
 }: ConnectButtonProps) => {
   const { data: selectedProject } = useSelectedProjectQuery()
   const { setConnectSheetSource } = useAppStateSnapshot()
+  const navigateToConnect = useNavigateToConnect()
   const isActiveHealthy = selectedProject?.status === PROJECT_STATUS.ACTIVE_HEALTHY
   const track = useTrack()
 
-  const [showConnect, setShowConnect] = useQueryState(
-    'showConnect',
-    parseAsBoolean.withDefault(false)
-  )
-
   if (isActiveHealthy) {
     return (
-      <ShortcutTooltip
-        shortcutId={SHORTCUT_IDS.CONNECT_OPEN_SHEET}
-        side="bottom"
-        open={showConnect ? false : undefined}
-      >
+      <ShortcutTooltip shortcutId={SHORTCUT_IDS.CONNECT_OPEN_SHEET} side="bottom">
         <Button
           variant={buttonVariant}
           aria-label="Connect"
@@ -48,7 +40,7 @@ export const ConnectButton = ({
           onClick={() => {
             track('header_connect_button_clicked')
             setConnectSheetSource('header_button')
-            setShowConnect(true)
+            navigateToConnect()
           }}
         >
           {!iconOnly && <span>Connect</span>}
@@ -66,7 +58,7 @@ export const ConnectButton = ({
       onClick={() => {
         track('header_connect_button_clicked')
         setConnectSheetSource('header_button')
-        setShowConnect(true)
+        navigateToConnect()
       }}
       tooltip={{
         content: {

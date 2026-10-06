@@ -1,13 +1,15 @@
 import { useFlag, useParams } from 'common'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, BookOpen, MessageCircle, Sparkles, Wrench } from 'lucide-react'
 
 import { useIsPlatformWebhooksEnabled } from '@/components/interfaces/App/FeaturePreview/FeaturePreviewContext'
 import { getInfrastructurePath } from '@/components/interfaces/Settings/Infrastructure/Infrastructure.utils'
 import { useIsFeatureEnabled } from '@/hooks/misc/useIsFeatureEnabled'
 import { useSelectedOrganizationQuery } from '@/hooks/misc/useSelectedOrganization'
 import { useSelectedProjectQuery } from '@/hooks/misc/useSelectedProject'
-import { IS_PLATFORM, PROJECT_STATUS } from '@/lib/constants'
+import { SIDEBAR_KEYS } from '@/components/layouts/ProjectLayout/LayoutSidebar/LayoutSidebarProvider'
+import { DOCS_URL, IS_PLATFORM, PROJECT_STATUS } from '@/lib/constants'
 import { SHORTCUT_IDS } from '@/state/shortcuts/registry'
+import { useSidebarManagerSnapshot } from '@/state/sidebar-manager-state'
 
 export const useGenerateSettingsMenu = () => {
   const { ref } = useParams()
@@ -35,6 +37,7 @@ export const useGenerateSettingsMenu = () => {
   const showLogDrains = logsAll && projectSettingsLogDrains
 
   const isProjectActive = project?.status === PROJECT_STATUS.ACTIVE_HEALTHY
+  const { toggleSidebar } = useSidebarManagerSnapshot()
 
   if (!IS_PLATFORM) {
     return [
@@ -91,6 +94,39 @@ export const useGenerateSettingsMenu = () => {
             items: [],
             rightIcon: <ArrowUpRight strokeWidth={1} className="h-4 w-4" />,
             label: 'Beta',
+          },
+        ],
+      },
+      {
+        title: 'Help & support',
+        items: [
+          {
+            name: 'AI Assistant',
+            key: 'help-assistant',
+            url: '',
+            icon: <Sparkles size={16} strokeWidth={1.5} />,
+            onSelect: () => toggleSidebar(SIDEBAR_KEYS.AI_ASSISTANT),
+          },
+          {
+            name: 'Docs',
+            key: 'help-docs',
+            url: `${DOCS_URL}/`,
+            isExternal: true,
+            icon: <BookOpen size={16} strokeWidth={1.5} />,
+          },
+          {
+            name: 'Troubleshooting',
+            key: 'help-troubleshooting',
+            url: `${DOCS_URL}/guides/troubleshooting?products=platform`,
+            isExternal: true,
+            icon: <Wrench size={16} strokeWidth={1.5} />,
+          },
+          {
+            name: 'Discord',
+            key: 'help-discord',
+            url: 'https://discord.supabase.com',
+            isExternal: true,
+            icon: <MessageCircle size={16} strokeWidth={1.5} />,
           },
         ],
       },

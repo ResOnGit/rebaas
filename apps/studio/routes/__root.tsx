@@ -191,36 +191,9 @@ const devToolbarExtraTabs: ExtraTab[] = IS_DEV_TOOLBAR_ENABLED
 
 configureMonacoLoader()
 
-// Non-prod (local + hosted staging) uses the white favicon, matching the Next
-// build (pages/_app.tsx passes `/favicon/staging` to MetaFaviconsPagesRouter for
-// non-prod). Uses the same synchronous NEXT_PUBLIC_ENVIRONMENT signal as
-// IS_DEV_TOOLBAR_ENABLED above, so it works at module scope (the `head()` route
-// option isn't a React component and can't run the async CLI check _app does).
-const FAVICON_ROUTE = IS_NON_PROD_ENV ? '/favicon/staging' : '/favicon'
+const REBAAS_FAVICON = `${BASE_PATH}/img/rebaas-logo.png`
 const THEME_COLOR = '1E1E1E'
-const APPLICATION_NAME = 'Supabase Studio'
-
-const APPLE_TOUCH_ICON_SIZES = [
-  '57x57',
-  '60x60',
-  '72x72',
-  '76x76',
-  '114x114',
-  '120x120',
-  '144x144',
-  '152x152',
-]
-// The 128 variant ships as `favicon-128.png` (no dimensions in the filename);
-// the rest follow `favicon-<size>.png`.
-const FAVICON_PNG_VARIANTS: Array<{ sizes: string; file: string }> = [
-  { sizes: '16x16', file: 'favicon-16x16.png' },
-  { sizes: '32x32', file: 'favicon-32x32.png' },
-  { sizes: '48x48', file: 'favicon-48x48.png' },
-  { sizes: '96x96', file: 'favicon-96x96.png' },
-  { sizes: '128x128', file: 'favicon-128.png' },
-  { sizes: '180x180', file: 'favicon-180x180.png' },
-  { sizes: '196x196', file: 'favicon-196x196.png' },
-]
+const APPLICATION_NAME = 'REBAAS'
 
 function buildRootHead() {
   const meta: Array<Record<string, string>> = [
@@ -230,25 +203,9 @@ function buildRootHead() {
     { name: 'googlebot', content: 'notranslate' },
     { name: 'application-name', content: APPLICATION_NAME },
     { name: 'msapplication-TileColor', content: `#${THEME_COLOR}` },
-    { name: 'msapplication-TileImage', content: `${BASE_PATH}${FAVICON_ROUTE}/mstile-144x144.png` },
-    {
-      name: 'msapplication-square70x70logo',
-      content: `${BASE_PATH}${FAVICON_ROUTE}/mstile-70x70.png`,
-    },
-    {
-      name: 'msapplication-square150x150logo',
-      content: `${BASE_PATH}${FAVICON_ROUTE}/mstile-150x150.png`,
-    },
-    {
-      name: 'msapplication-wide310x150logo',
-      content: `${BASE_PATH}${FAVICON_ROUTE}/mstile-310x150.png`,
-    },
-    {
-      name: 'msapplication-square310x310logo',
-      content: `${BASE_PATH}${FAVICON_ROUTE}/mstile-310x310.png`,
-    },
+    { name: 'msapplication-TileImage', content: REBAAS_FAVICON },
     { name: 'theme-color', content: `#${THEME_COLOR}` },
-    { title: 'Supabase' },
+    { title: APPLICATION_NAME },
   ]
 
   const links: Array<Record<string, string>> = [
@@ -256,21 +213,9 @@ function buildRootHead() {
     // styles/fonts.css — no Google Fonts CDN dependency at runtime, matching how
     // next/font self-hosts them on the Next build (and keeping self-hosted/offline
     // studio working).
-    ...APPLE_TOUCH_ICON_SIZES.map((size) => ({
-      rel: 'apple-touch-icon-precomposed',
-      sizes: size,
-      href: `${BASE_PATH}${FAVICON_ROUTE}/apple-icon-${size}.png`,
-    })),
-    ...FAVICON_PNG_VARIANTS.map(({ sizes, file }) => ({
-      rel: 'icon',
-      type: 'image/png',
-      sizes,
-      href: `${BASE_PATH}${FAVICON_ROUTE}/${file}`,
-    })),
-    { rel: 'shortcut icon', href: `${BASE_PATH}${FAVICON_ROUTE}/favicon.ico` },
-    { rel: 'icon', type: 'image/x-icon', href: `${BASE_PATH}${FAVICON_ROUTE}/favicon.ico` },
-    { rel: 'apple-touch-icon', href: `${BASE_PATH}${FAVICON_ROUTE}/favicon.ico` },
-    { rel: 'manifest', href: `${BASE_PATH}${FAVICON_ROUTE}/manifest.json` },
+    { rel: 'shortcut icon', type: 'image/png', href: REBAAS_FAVICON },
+    { rel: 'icon', type: 'image/png', href: REBAAS_FAVICON, sizes: 'any' },
+    { rel: 'apple-touch-icon', href: REBAAS_FAVICON },
   ]
 
   if (IS_PLATFORM) {

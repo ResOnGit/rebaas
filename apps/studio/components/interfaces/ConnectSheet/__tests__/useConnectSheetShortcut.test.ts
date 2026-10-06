@@ -8,13 +8,13 @@ import { SHORTCUT_IDS } from '@/state/shortcuts/registry'
 const {
   mockSetCommandMenuOpen,
   mockSetConnectSheetSource,
-  mockSetShowConnect,
+  mockNavigateToConnect,
   mockUseSelectedProjectQuery,
   mockUseShortcut,
 } = vi.hoisted(() => ({
   mockSetCommandMenuOpen: vi.fn(),
   mockSetConnectSheetSource: vi.fn(),
-  mockSetShowConnect: vi.fn(),
+  mockNavigateToConnect: vi.fn(),
   mockUseSelectedProjectQuery: vi.fn(),
   mockUseShortcut: vi.fn(),
 }))
@@ -23,9 +23,8 @@ vi.mock('ui-patterns/CommandMenu', () => ({
   useSetCommandMenuOpen: () => mockSetCommandMenuOpen,
 }))
 
-vi.mock('nuqs', () => ({
-  parseAsBoolean: { withDefault: vi.fn(() => 'showConnectParser') },
-  useQueryState: () => [false, mockSetShowConnect],
+vi.mock('../useNavigateToConnect', () => ({
+  useNavigateToConnect: () => mockNavigateToConnect,
 }))
 
 vi.mock('@/hooks/misc/useSelectedProject', () => ({
@@ -57,7 +56,7 @@ describe('useConnectSheetShortcut', () => {
     )
   })
 
-  it('opens the Connect sheet from the keyboard shortcut', () => {
+  it('opens the Connect page from the keyboard shortcut', () => {
     renderHook(() => useConnectSheetShortcut())
 
     const shortcutCallback = mockUseShortcut.mock.calls[0][1]
@@ -65,7 +64,7 @@ describe('useConnectSheetShortcut', () => {
 
     expect(mockSetConnectSheetSource).toHaveBeenCalledWith('keyboard_shortcut')
     expect(mockSetCommandMenuOpen).toHaveBeenCalledWith(false)
-    expect(mockSetShowConnect).toHaveBeenCalledWith(true)
+    expect(mockNavigateToConnect).toHaveBeenCalledWith()
   })
 
   it('disables the shortcut when the selected project cannot connect', () => {

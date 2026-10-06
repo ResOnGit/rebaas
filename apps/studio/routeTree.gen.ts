@@ -96,6 +96,8 @@ import { Route as ProjectRefIntegrationsIndexRouteImport } from './routes/projec
 import { Route as ProjectRefFunctionsIndexRouteImport } from './routes/project/$ref/functions/index'
 import { Route as ProjectRefExplorerIndexRouteImport } from './routes/project/$ref/explorer/index'
 import { Route as ProjectRefEditorIndexRouteImport } from './routes/project/$ref/editor/index'
+import { Route as ProjectRefConnectIndexRouteImport } from './routes/project/$ref/connect/index'
+import { Route as ProjectRefHow2IndexRouteImport } from './routes/project/$ref/how-2/index'
 import { Route as ProjectRefComputeIndexRouteImport } from './routes/project/$ref/compute/index'
 import { Route as ProjectRefBranchesIndexRouteImport } from './routes/project/$ref/branches/index'
 import { Route as ProjectRefApiIndexRouteImport } from './routes/project/$ref/api/index'
@@ -778,6 +780,16 @@ const ProjectRefEditorIndexRoute = ProjectRefEditorIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ProjectRefEditorRoute,
+} as any)
+const ProjectRefConnectIndexRoute = ProjectRefConnectIndexRouteImport.update({
+  id: '/connect/',
+  path: '/connect/',
+  getParentRoute: () => ProjectRefRoute,
+} as any)
+const ProjectRefHow2IndexRoute = ProjectRefHow2IndexRouteImport.update({
+  id: '/how-2/',
+  path: '/how-2/',
+  getParentRoute: () => ProjectRefRoute,
 } as any)
 const ProjectRefComputeIndexRoute = ProjectRefComputeIndexRouteImport.update({
   id: '/',
@@ -2337,6 +2349,8 @@ export interface FileRoutesByFullPath {
   '/project/$ref/api/': typeof ProjectRefApiIndexRoute
   '/project/$ref/branches/': typeof ProjectRefBranchesIndexRoute
   '/project/$ref/compute/': typeof ProjectRefComputeIndexRoute
+  '/project/$ref/connect/': typeof ProjectRefConnectIndexRoute
+  '/project/$ref/how-2/': typeof ProjectRefHow2IndexRoute
   '/project/$ref/editor/': typeof ProjectRefEditorIndexRoute
   '/project/$ref/explorer/': typeof ProjectRefExplorerIndexRoute
   '/project/$ref/functions/': typeof ProjectRefFunctionsIndexRoute
@@ -2646,6 +2660,8 @@ export interface FileRoutesByTo {
   '/project/$ref/api': typeof ProjectRefApiIndexRoute
   '/project/$ref/branches': typeof ProjectRefBranchesIndexRoute
   '/project/$ref/compute': typeof ProjectRefComputeIndexRoute
+  '/project/$ref/connect': typeof ProjectRefConnectIndexRoute
+  '/project/$ref/how-2': typeof ProjectRefHow2IndexRoute
   '/project/$ref/editor': typeof ProjectRefEditorIndexRoute
   '/project/$ref/explorer': typeof ProjectRefExplorerIndexRoute
   '/project/$ref/functions': typeof ProjectRefFunctionsIndexRoute
@@ -2973,6 +2989,8 @@ export interface FileRoutesById {
   '/project/$ref/api/': typeof ProjectRefApiIndexRoute
   '/project/$ref/branches/': typeof ProjectRefBranchesIndexRoute
   '/project/$ref/compute/': typeof ProjectRefComputeIndexRoute
+  '/project/$ref/connect/': typeof ProjectRefConnectIndexRoute
+  '/project/$ref/how-2/': typeof ProjectRefHow2IndexRoute
   '/project/$ref/editor/': typeof ProjectRefEditorIndexRoute
   '/project/$ref/explorer/': typeof ProjectRefExplorerIndexRoute
   '/project/$ref/functions/': typeof ProjectRefFunctionsIndexRoute
@@ -3299,6 +3317,8 @@ export interface FileRouteTypes {
     | '/project/$ref/api/'
     | '/project/$ref/branches/'
     | '/project/$ref/compute/'
+    | '/project/$ref/connect/'
+    | '/project/$ref/how-2/'
     | '/project/$ref/editor/'
     | '/project/$ref/explorer/'
     | '/project/$ref/functions/'
@@ -3608,6 +3628,8 @@ export interface FileRouteTypes {
     | '/project/$ref/api'
     | '/project/$ref/branches'
     | '/project/$ref/compute'
+    | '/project/$ref/connect'
+    | '/project/$ref/how-2'
     | '/project/$ref/editor'
     | '/project/$ref/explorer'
     | '/project/$ref/functions'
@@ -3934,6 +3956,8 @@ export interface FileRouteTypes {
     | '/project/$ref/api/'
     | '/project/$ref/branches/'
     | '/project/$ref/compute/'
+    | '/project/$ref/connect/'
+    | '/project/$ref/how-2/'
     | '/project/$ref/editor/'
     | '/project/$ref/explorer/'
     | '/project/$ref/functions/'
@@ -4804,6 +4828,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/project/$ref/editor/'
       preLoaderRoute: typeof ProjectRefEditorIndexRouteImport
       parentRoute: typeof ProjectRefEditorRoute
+    }
+    '/project/$ref/connect/': {
+      id: '/project/$ref/connect/'
+      path: '/connect'
+      fullPath: '/project/$ref/connect/'
+      preLoaderRoute: typeof ProjectRefConnectIndexRouteImport
+      parentRoute: typeof ProjectRefRoute
+    }
+    '/project/$ref/how-2/': {
+      id: '/project/$ref/how-2/'
+      path: '/how-2'
+      fullPath: '/project/$ref/how-2/'
+      preLoaderRoute: typeof ProjectRefHow2IndexRouteImport
+      parentRoute: typeof ProjectRefRoute
     }
     '/project/$ref/compute/': {
       id: '/project/$ref/compute/'
@@ -7134,6 +7172,8 @@ interface ProjectRefRouteChildren {
   ProjectRefStorageRoute: typeof ProjectRefStorageRouteWithChildren
   ProjectRefIndexRoute: typeof ProjectRefIndexRoute
   ProjectRefApiIndexRoute: typeof ProjectRefApiIndexRoute
+  ProjectRefConnectIndexRoute: typeof ProjectRefConnectIndexRoute
+  ProjectRefHow2IndexRoute: typeof ProjectRefHow2IndexRoute
 }
 
 const ProjectRefRouteChildren: ProjectRefRouteChildren = {
@@ -7155,6 +7195,8 @@ const ProjectRefRouteChildren: ProjectRefRouteChildren = {
   ProjectRefStorageRoute: ProjectRefStorageRouteWithChildren,
   ProjectRefIndexRoute: ProjectRefIndexRoute,
   ProjectRefApiIndexRoute: ProjectRefApiIndexRoute,
+  ProjectRefConnectIndexRoute: ProjectRefConnectIndexRoute,
+  ProjectRefHow2IndexRoute: ProjectRefHow2IndexRoute,
 }
 
 const ProjectRefRouteWithChildren = ProjectRefRoute._addFileChildren(

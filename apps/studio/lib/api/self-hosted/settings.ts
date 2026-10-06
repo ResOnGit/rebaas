@@ -37,7 +37,7 @@ export function getProjectSettings() {
     db_user: 'postgres',
     inserted_at: '2021-08-02T06:40:40.646Z',
     jwt_secret: AUTH_JWT_SECRET,
-    name: process.env.DEFAULT_PROJECT_NAME || 'Default Project',
+    name: 'REBAAS',
     ref: 'default',
     region: 'local',
     service_api_keys: [

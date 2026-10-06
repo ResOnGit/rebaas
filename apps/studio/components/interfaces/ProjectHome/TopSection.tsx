@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Badge, cn, Tooltip, TooltipContent, TooltipTrigger } from 'ui'
+import { CommandMenuTriggerInput } from 'ui-patterns/CommandMenu'
 import { ShimmeringLoader } from 'ui-patterns/ShimmeringLoader'
 
 import { InstanceConfiguration } from '../Settings/Infrastructure/InfrastructureConfiguration/InstanceConfiguration'
@@ -32,7 +33,7 @@ export const TopSection = () => {
       ? currentBranch.name
       : project?.name
         ? project.name
-        : 'Welcome to your project'
+        : 'REBAAS'
 
   if (isPaused) {
     return <ProjectPausedState />
@@ -80,6 +81,12 @@ export const TopSection = () => {
                 )}
               </div>
               <ProjectConnectionPopover projectRef={project?.ref} />
+              {!IS_PLATFORM && (
+                <CommandMenuTriggerInput
+                  placeholder="Search..."
+                  className="mt-6 w-full max-w-xl rounded-full"
+                />
+              )}
             </div>
           </div>
           {IS_PLATFORM && (

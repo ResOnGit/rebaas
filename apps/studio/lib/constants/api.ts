@@ -13,9 +13,7 @@ export const PROJECT_DB_HOST = PUBLIC_URL.hostname
 export const DEFAULT_PROJECT = {
   id: 1,
   ref: 'default',
-  name: !!process.env.CURRENT_CLI_VERSION
-    ? 'Supabase Studio (CLI)'
-    : process.env.DEFAULT_PROJECT_NAME || 'Default Project',
+  name: process.env.CURRENT_CLI_VERSION ? 'Supabase Studio (CLI)' : 'REBAAS',
   organization_id: 1,
   cloud_provider: 'localhost',
   status: 'ACTIVE_HEALTHY',

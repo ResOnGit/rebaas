@@ -2,6 +2,15 @@
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
 
+   REBAAS is a modified version of Supabase Studio and related
+   components from https://github.com/supabase/supabase
+   Copyright of the original work belongs to Supabase and its contributors.
+   This derivative is used under the Apache License 2.0.
+   Changes are documented in this repository.
+   The Supabase name and logo are trademarks of their owners.
+
+
+
    TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
 
    1. Definitions.

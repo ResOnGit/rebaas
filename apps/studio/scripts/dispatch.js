@@ -41,9 +41,13 @@ const script = `${target}:${framework}`
 // event loop and stdin doesn't flow through cleanly. The dev server says
 // "ready" then exits ~1s later. `spawn` + manual forwarding keeps the
 // child interactive and lets the parent exit cleanly when the child does.
-const child = spawn('pnpm', ['run', script], {
+// Windows: spawn cannot resolve the bare `pnpm` shim; call `pnpm.cmd` instead.
+const pnpmCommand = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm'
+const child = spawn(pnpmCommand, ['run', script], {
   stdio: 'inherit',
   env: process.env,
+  // Node on Windows rejects spawning *.cmd without a shell (EINVAL).
+  shell: process.platform === 'win32',
 })
 
 const forwardSignal = (signal) => {

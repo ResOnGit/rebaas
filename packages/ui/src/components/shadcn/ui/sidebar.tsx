@@ -153,6 +153,8 @@ const Sidebar = React.forwardRef<
     side?: 'left' | 'right'
     variant?: 'sidebar' | 'floating' | 'inset'
     collapsible?: 'offcanvas' | 'icon' | 'none'
+    /** Keep the desktop sidebar column on small screens instead of a sheet. */
+    disableMobileSheet?: boolean
   }
 >(
   (
@@ -161,6 +163,7 @@ const Sidebar = React.forwardRef<
       side = 'left',
       variant = 'sidebar',
       collapsible = 'offcanvas',
+      disableMobileSheet = false,
       className,
       children,
       ...props
@@ -184,7 +187,7 @@ const Sidebar = React.forwardRef<
       )
     }
 
-    if (isMobile) {
+    if (isMobile && !disableMobileSheet) {
       return (
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
           <SheetContent
@@ -209,7 +212,8 @@ const Sidebar = React.forwardRef<
         ref={ref}
         className={cn(
           overflowing ? 'w-12' : '',
-          'relative group peer hidden md:block text-sidebar-foreground',
+          'relative group peer text-sidebar-foreground',
+          disableMobileSheet ? 'flex' : 'hidden md:block',
           'shrink-0'
         )}
         data-state={state}
@@ -233,7 +237,8 @@ const Sidebar = React.forwardRef<
           className={cn(
             'absolute top-0 h-full', // sidebar custom changes - We have also removed 'fixed', and 'h-svh'
             //
-            'duration-100 inset-y-0 z-10 hidden w-(--sidebar-width) transition-[left,right,width] ease-linear md:flex',
+            'duration-100 inset-y-0 z-10 w-(--sidebar-width) transition-[left,right,width] ease-linear',
+            disableMobileSheet ? 'flex' : 'hidden md:flex',
             side === 'left'
               ? 'left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)'
               : 'right-0 group-data-[collapsible=offcanvas]:-right-(--sidebar-width)',

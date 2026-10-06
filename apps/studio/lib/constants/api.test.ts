@@ -69,7 +69,7 @@ describe('constants/api', () => {
       expect(DEFAULT_PROJECT).toEqual({
         id: 1,
         ref: 'default',
-        name: 'Default Project',
+        name: 'REBAAS',
         organization_id: 1,
         cloud_provider: 'localhost',
         status: 'ACTIVE_HEALTHY',
@@ -78,10 +78,10 @@ describe('constants/api', () => {
       })
     })
 
-    it('should use DEFAULT_PROJECT_NAME env var when set', async () => {
+    it('keeps the name REBAAS even when DEFAULT_PROJECT_NAME is set', async () => {
       vi.stubEnv('DEFAULT_PROJECT_NAME', 'My Custom Project')
       const { DEFAULT_PROJECT } = await import('./api')
-      expect(DEFAULT_PROJECT.name).toBe('My Custom Project')
+      expect(DEFAULT_PROJECT.name).toBe('REBAAS')
     })
 
     it('should have static id and ref', async () => {

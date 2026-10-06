@@ -2,7 +2,17 @@ import { LOCAL_STORAGE_KEYS, useFlag, useIsMFAEnabled, useParams } from 'common'
 import { AnimatePresence, motion, MotionProps } from 'framer-motion'
 import { Home } from 'icons'
 import { isUndefined } from 'lodash'
-import { Blocks, Boxes, ChartArea, PanelLeftDashed, Receipt, Settings, Users } from 'lucide-react'
+import {
+  Blocks,
+  Boxes,
+  ChartArea,
+  Lightbulb,
+  PanelLeftDashed,
+  Receipt,
+  Settings,
+  Sparkles,
+  Users,
+} from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ComponentProps, ComponentPropsWithoutRef, FC, ReactNode, useEffect } from 'react'
@@ -33,9 +43,12 @@ import { Route } from '../ui/ui.types'
 import {
   generateProductRoutes,
   generateSettingsRoutes,
+  useGenerateConnectRoute,
+  useGenerateHow2Route,
   useGenerateOtherRoutes,
   useGenerateToolRoutes,
 } from '@/components/layouts/Navigation/NavigationBar/NavigationBar.utils'
+import { LocalDropdown } from '@/components/interfaces/LocalDropdown'
 import { ProjectIndexPageLink } from '@/data/prefetchers/project.$ref'
 import { useHideSidebar } from '@/hooks/misc/useHideSidebar'
 import { useIsFeatureEnabled } from '@/hooks/misc/useIsFeatureEnabled'
@@ -43,8 +56,11 @@ import { useLints } from '@/hooks/misc/useLints'
 import { useLocalStorageQuery } from '@/hooks/misc/useLocalStorage'
 import { useSelectedOrganizationQuery } from '@/hooks/misc/useSelectedOrganization'
 import { useSelectedProjectQuery } from '@/hooks/misc/useSelectedProject'
+import { IS_PLATFORM } from '@/lib/constants'
 import { useTrack } from '@/lib/telemetry/track'
+import { SIDEBAR_KEYS } from '@/components/layouts/ProjectLayout/LayoutSidebar/LayoutSidebarProvider'
 import { SHORTCUT_IDS } from '@/state/shortcuts/registry'
+import { useSidebarManagerSnapshot } from '@/state/sidebar-manager-state'
 
 export const ICON_SIZE = 32
 export const ICON_STROKE_WIDTH = 1.5
@@ -65,11 +81,14 @@ export const Sidebar = ({ className, ...props }: SidebarProps) => {
 
   const [sidebarBehaviour, setSidebarBehaviour] = useLocalStorageQuery(
     LOCAL_STORAGE_KEYS.SIDEBAR_BEHAVIOR,
-    DEFAULT_SIDEBAR_BEHAVIOR
+    IS_PLATFORM ? DEFAULT_SIDEBAR_BEHAVIOR : 'open'
   )
 
   useEffect(() => {
-    // logic to toggle sidebar open based on sidebarBehaviour state
+    if (!IS_PLATFORM) {
+      setOpen(sidebarBehaviour !== 'closed')
+      return
+    }
     if (sidebarBehaviour === 'open') setOpen(true)
     if (sidebarBehaviour === 'closed') setOpen(false)
   }, [sidebarBehaviour, setOpen])
@@ -81,18 +100,21 @@ export const Sidebar = ({ className, ...props }: SidebarProps) => {
           {...props}
           className={cn('z-50', className)}
           transition={{ delay: 0.4, duration: 0.4 }}
-          overflowing={sidebarBehaviour === 'expandable'}
+          overflowing={IS_PLATFORM && sidebarBehaviour === 'expandable'}
+          disableMobileSheet={!IS_PLATFORM}
           collapsible="icon"
           variant="sidebar"
           onMouseEnter={() => {
-            if (sidebarBehaviour === 'expandable') setOpen(true)
+            if (IS_PLATFORM && sidebarBehaviour === 'expandable') setOpen(true)
           }}
           onMouseLeave={() => {
-            if (sidebarBehaviour === 'expandable') setOpen(false)
+            if (IS_PLATFORM && sidebarBehaviour === 'expandable') setOpen(false)
           }}
         >
           <SidebarContent
             footer={
+              <div className="flex items-center gap-1">
+                {!IS_PLATFORM && <LocalDropdown triggerClassName="border-0" />}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -111,17 +133,69 @@ export const Sidebar = ({ className, ...props }: SidebarProps) => {
                     <DropdownMenuSeparator />
                     <DropdownMenuRadioItem value="open">Expanded</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="closed">Collapsed</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="expandable">
-                      Expand on hover
-                    </DropdownMenuRadioItem>
+                    {IS_PLATFORM && (
+                      <DropdownMenuRadioItem value="expandable">
+                        Expand on hover
+                      </DropdownMenuRadioItem>
+                    )}
                   </DropdownMenuRadioGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
+              </div>
             }
           />
         </SidebarMotion>
       )}
     </AnimatePresence>
+  )
+}
+
+const SidebarBrand = () => {
+  const router = useRouter()
+  const { ref } = useParams()
+  const { state } = useSidebar()
+  const isCollapsed = state === 'collapsed'
+
+  return (
+    <div className={cn('flex justify-center', isCollapsed ? 'px-1 py-3' : 'px-4 pt-6 pb-4')}>
+      <Link
+        href={ref ? `/project/${ref}` : '/project/default'}
+        className="flex items-center justify-center"
+      >
+        <img
+          alt="REBAAS"
+          src={`${router.basePath}/img/rebaas-logo.png`}
+          className={cn('object-contain', isCollapsed ? 'h-8 w-8' : 'h-24 w-24')}
+        />
+        <span className="sr-only">Back to home</span>
+      </Link>
+    </div>
+  )
+}
+
+const SidebarPanelButton = ({
+  label,
+  sidebarKey,
+  icon,
+}: {
+  label: string
+  sidebarKey: (typeof SIDEBAR_KEYS)[keyof typeof SIDEBAR_KEYS]
+  icon: ReactNode
+}) => {
+  const { activeSidebar, toggleSidebar } = useSidebarManagerSnapshot()
+  const isOpen = activeSidebar?.id === sidebarKey
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton
+        isActive={isOpen}
+        className="h-9 font-medium text-base"
+        onClick={() => toggleSidebar(sidebarKey)}
+      >
+        {icon}
+        <span>{label}</span>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
   )
 }
 
@@ -132,6 +206,7 @@ export const SidebarContent = ({ footer }: { footer?: ReactNode }) => {
     <>
       <AnimatePresence mode="wait">
         <SidebarContentPrimitive>
+          {!IS_PLATFORM && <SidebarBrand />}
           {projectRef ? (
             <motion.nav key="project-links">
               <ProjectLinks />
@@ -187,7 +262,7 @@ export function SideBarNavLink({
     disabled: route.disabled,
     isActive: active,
     isLoading,
-    className: cn('text-sm', sidebarBehaviour === 'open' ? 'px-2!' : ''),
+    className: cn('h-9 font-medium text-base', sidebarBehaviour === 'open' ? 'px-3!' : ''),
     size: 'default' as const,
     onClick: onClick,
   }
@@ -282,6 +357,8 @@ const ProjectLinks = () => {
   const authOverviewPageEnabled = useFlag('authOverviewPage')
   const computeEnabled = useFlag('compute')
 
+  const connectRoute = useGenerateConnectRoute()
+  const how2Route = useGenerateHow2Route()
   const toolRoutes = useGenerateToolRoutes()
   const productRoutes = generateProductRoutes(ref, project, {
     auth: authEnabled,
@@ -310,6 +387,22 @@ const ProjectLinks = () => {
               shortcutId: SHORTCUT_IDS.NAV_HOME,
             }}
           />
+          {connectRoute && (
+            <SideBarNavLink
+              key="connect"
+              route={connectRoute}
+              active={activeRoute === 'connect'}
+              isLoading={isProjectPending}
+            />
+          )}
+          {how2Route && (
+            <SideBarNavLink
+              key="how-2"
+              route={how2Route}
+              active={activeRoute === 'how-2'}
+              isLoading={isProjectPending}
+            />
+          )}
           {toolRoutes.map((route, i) => (
             <SideBarNavLink
               key={`tools-routes-${i}`}
@@ -377,6 +470,20 @@ const ProjectLinks = () => {
       {/* Settings routes to be added in with project/org nav */}
       <SidebarGroup className="gap-0.5">
         <SidebarMenu>
+          {!IS_PLATFORM && (
+            <>
+              <SidebarPanelButton
+                label="AI Assistant"
+                sidebarKey={SIDEBAR_KEYS.AI_ASSISTANT}
+                icon={<Sparkles size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />}
+              />
+              <SidebarPanelButton
+                label="Advisor Center"
+                sidebarKey={SIDEBAR_KEYS.ADVISOR_PANEL}
+                icon={<Lightbulb size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />}
+              />
+            </>
+          )}
           {settingsRoutes.map((route, i) => (
             <SideBarNavLink
               key={`settings-routes-${i}`}

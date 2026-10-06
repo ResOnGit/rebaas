@@ -89,7 +89,7 @@ describe('api/self-hosted/settings', () => {
       const settings = getSettings()
 
       expect(settings.jwt_secret).toBe('custom-jwt-secret-with-at-least-32-chars')
-      expect(settings.name).toBe('My Custom Project')
+      expect(settings.name).toBe('REBAAS')
       expect(settings.service_api_keys[0].api_key).toBe('custom-anon-key')
       expect(settings.service_api_keys[1].api_key).toBe('custom-service-key')
     })
@@ -111,7 +111,7 @@ describe('api/self-hosted/settings', () => {
       const { getProjectSettings: getSettings } = await import('./settings')
       const settings = getSettings()
 
-      expect(settings.name).toBe('Default Project')
+      expect(settings.name).toBe('REBAAS')
     })
 
     it('should have correct db_ip_addr_config', () => {
