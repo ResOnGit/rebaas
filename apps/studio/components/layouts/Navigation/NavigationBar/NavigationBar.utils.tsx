@@ -9,7 +9,7 @@ import {
   Storage,
   TableEditor,
 } from 'icons'
-import { Blocks, BookOpen, Lightbulb, List, Plug, Settings, Telescope } from 'lucide-react'
+import { Archive, Blocks, BookOpen, Lightbulb, List, Plug, Settings, Telescope } from 'lucide-react'
 
 import {
   useIsExplorerEnabled,
@@ -171,6 +171,17 @@ export const generateProductRoutes = (
                   ? `/project/${ref}/auth/overview`
                   : `/project/${ref}/auth/users`),
             shortcutId: SHORTCUT_IDS.NAV_AUTH,
+          },
+        ]
+      : []),
+    ...(authEnabled && !IS_PLATFORM
+      ? [
+          {
+            key: 'backups',
+            label: 'Backups',
+            disabled: !isProjectActive,
+            icon: <Archive size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
+            link: ref && (isProjectBuilding ? buildingUrl : `/project/${ref}/backups`),
           },
         ]
       : []),

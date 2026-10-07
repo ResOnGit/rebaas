@@ -198,6 +198,7 @@ These are the layout-only TanStack files. Most hold a single product layout comp
 - [x] A `routes/project/$ref/auth/users.tsx` ← `pages/project/[ref]/auth/users.tsx`
 - [x] A `routes/project/$ref/auth/providers.tsx` ← `pages/project/[ref]/auth/providers.tsx` (sets `skipAuthLayout: true`, wraps in `AuthProvidersLayout` directly)
 - [x] A `routes/project/$ref/auth/mfa.tsx` ← `pages/project/[ref]/auth/mfa.tsx`
+- [x] A `routes/project/$ref/backups/index.tsx` ← `pages/project/[ref]/backups/index.tsx` (REBAAS self-hosted only)
 - [x] A `routes/project/$ref/auth/hooks.tsx` ← `pages/project/[ref]/auth/hooks.tsx`
 - [x] A `routes/project/$ref/auth/smtp.tsx` ← `pages/project/[ref]/auth/smtp.tsx` (sets `skipAuthLayout: true`, wraps in `AuthEmailsLayout` directly)
 - [x] A `routes/project/$ref/auth/sessions.tsx` ← `pages/project/[ref]/auth/sessions.tsx`

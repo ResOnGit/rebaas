@@ -81,66 +81,64 @@ export const Sidebar = ({ className, ...props }: SidebarProps) => {
 
   const [sidebarBehaviour, setSidebarBehaviour] = useLocalStorageQuery(
     LOCAL_STORAGE_KEYS.SIDEBAR_BEHAVIOR,
-    IS_PLATFORM ? DEFAULT_SIDEBAR_BEHAVIOR : 'open'
+    DEFAULT_SIDEBAR_BEHAVIOR
   )
+  const expandsOnHover = !IS_PLATFORM || sidebarBehaviour === 'expandable'
 
   useEffect(() => {
-    if (!IS_PLATFORM) {
-      setOpen(sidebarBehaviour !== 'closed')
-      return
-    }
+    if (expandsOnHover) return
     if (sidebarBehaviour === 'open') setOpen(true)
     if (sidebarBehaviour === 'closed') setOpen(false)
-  }, [sidebarBehaviour, setOpen])
+  }, [expandsOnHover, sidebarBehaviour, setOpen])
 
   return (
     <AnimatePresence>
       {!hideSideBar && (
         <SidebarMotion
           {...props}
-          className={cn('z-50', className)}
+          className={cn('z-50', !IS_PLATFORM && 'rebaas-sidebar', className)}
           transition={{ delay: 0.4, duration: 0.4 }}
-          overflowing={IS_PLATFORM && sidebarBehaviour === 'expandable'}
+          overflowing={expandsOnHover}
           disableMobileSheet={!IS_PLATFORM}
           collapsible="icon"
           variant="sidebar"
           onMouseEnter={() => {
-            if (IS_PLATFORM && sidebarBehaviour === 'expandable') setOpen(true)
+            if (expandsOnHover) setOpen(true)
           }}
           onMouseLeave={() => {
-            if (IS_PLATFORM && sidebarBehaviour === 'expandable') setOpen(false)
+            if (expandsOnHover) setOpen(false)
           }}
         >
           <SidebarContent
             footer={
               <div className="flex items-center gap-1">
                 {!IS_PLATFORM && <LocalDropdown triggerClassName="border-0" />}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="text"
-                    className={`w-min px-1.5 mx-0.5 ${sidebarBehaviour === 'open' ? 'px-2!' : ''}`}
-                    icon={<PanelLeftDashed size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />}
-                    aria-label="Sidebar control"
-                  />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent side="top" align="start" className="w-40">
-                  <DropdownMenuRadioGroup
-                    value={sidebarBehaviour}
-                    onValueChange={(value) => setSidebarBehaviour(value as SidebarBehaviourType)}
-                  >
-                    <DropdownMenuLabel>Sidebar control</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuRadioItem value="open">Expanded</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value="closed">Collapsed</DropdownMenuRadioItem>
-                    {IS_PLATFORM && (
-                      <DropdownMenuRadioItem value="expandable">
-                        Expand on hover
-                      </DropdownMenuRadioItem>
-                    )}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                {IS_PLATFORM && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="text"
+                        className={`w-min px-1.5 mx-0.5 ${sidebarBehaviour === 'open' ? 'px-2!' : ''}`}
+                        icon={<PanelLeftDashed size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />}
+                        aria-label="Sidebar control"
+                      />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent side="top" align="start" className="w-40">
+                      <DropdownMenuRadioGroup
+                        value={sidebarBehaviour}
+                        onValueChange={(value) => setSidebarBehaviour(value as SidebarBehaviourType)}
+                      >
+                        <DropdownMenuLabel>Sidebar control</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuRadioItem value="open">Expanded</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="closed">Collapsed</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="expandable">
+                          Expand on hover
+                        </DropdownMenuRadioItem>
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
               </div>
             }
           />
@@ -157,7 +155,7 @@ const SidebarBrand = () => {
   const isCollapsed = state === 'collapsed'
 
   return (
-    <div className={cn('flex justify-center', isCollapsed ? 'px-1 py-3' : 'px-4 pt-6 pb-4')}>
+    <div className="flex h-36 items-center justify-center">
       <Link
         href={ref ? `/project/${ref}` : '/project/default'}
         className="flex items-center justify-center"
@@ -165,7 +163,10 @@ const SidebarBrand = () => {
         <img
           alt="REBAAS"
           src={`${router.basePath}/img/rebaas-logo.png`}
-          className={cn('object-contain', isCollapsed ? 'h-8 w-8' : 'h-24 w-24')}
+          className={cn(
+            'object-contain transition-all duration-300 ease-out',
+            isCollapsed ? 'size-8' : 'size-24'
+          )}
         />
         <span className="sr-only">Back to home</span>
       </Link>
@@ -189,6 +190,7 @@ const SidebarPanelButton = ({
     <SidebarMenuItem>
       <SidebarMenuButton
         isActive={isOpen}
+        hasIcon={IS_PLATFORM}
         className="h-9 font-medium text-base"
         onClick={() => toggleSidebar(sidebarKey)}
       >
@@ -262,6 +264,7 @@ export function SideBarNavLink({
     disabled: route.disabled,
     isActive: active,
     isLoading,
+    hasIcon: IS_PLATFORM,
     className: cn('h-9 font-medium text-base', sidebarBehaviour === 'open' ? 'px-3!' : ''),
     size: 'default' as const,
     onClick: onClick,
@@ -375,33 +378,33 @@ const ProjectLinks = () => {
     <>
       <SidebarGroup className="gap-0.5">
         <SidebarMenu>
-          <SideBarNavLink
-            key="home"
-            active={isUndefined(activeRoute) && !isUndefined(router.query.ref)}
-            route={{
-              key: 'HOME',
-              label: 'Project Overview',
-              icon: <Home size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
-              link: `/project/${ref}`,
-              linkElement: <ProjectIndexPageLink projectRef={ref} />,
-              shortcutId: SHORTCUT_IDS.NAV_HOME,
-            }}
-          />
-          {connectRoute && (
+          {IS_PLATFORM && (
             <SideBarNavLink
-              key="connect"
-              route={connectRoute}
-              active={activeRoute === 'connect'}
-              isLoading={isProjectPending}
+              key="home"
+              active={isUndefined(activeRoute) && !isUndefined(router.query.ref)}
+              route={{
+                key: 'HOME',
+                label: 'Overview',
+                icon: <Home size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
+                link: `/project/${ref}`,
+                linkElement: <ProjectIndexPageLink projectRef={ref} />,
+                shortcutId: SHORTCUT_IDS.NAV_HOME,
+              }}
             />
           )}
-          {how2Route && (
-            <SideBarNavLink
-              key="how-2"
-              route={how2Route}
-              active={activeRoute === 'how-2'}
-              isLoading={isProjectPending}
-            />
+          {!IS_PLATFORM && (
+            <>
+              <SidebarPanelButton
+                label="AI Assistant"
+                sidebarKey={SIDEBAR_KEYS.AI_ASSISTANT}
+                icon={<Sparkles size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />}
+              />
+              <SidebarPanelButton
+                label="Advisor Center"
+                sidebarKey={SIDEBAR_KEYS.ADVISOR_PANEL}
+                icon={<Lightbulb size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />}
+              />
+            </>
           )}
           {toolRoutes.map((route, i) => (
             <SideBarNavLink
@@ -470,19 +473,21 @@ const ProjectLinks = () => {
       {/* Settings routes to be added in with project/org nav */}
       <SidebarGroup className="gap-0.5">
         <SidebarMenu>
-          {!IS_PLATFORM && (
-            <>
-              <SidebarPanelButton
-                label="AI Assistant"
-                sidebarKey={SIDEBAR_KEYS.AI_ASSISTANT}
-                icon={<Sparkles size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />}
-              />
-              <SidebarPanelButton
-                label="Advisor Center"
-                sidebarKey={SIDEBAR_KEYS.ADVISOR_PANEL}
-                icon={<Lightbulb size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />}
-              />
-            </>
+          {connectRoute && (
+            <SideBarNavLink
+              key="connect"
+              route={connectRoute}
+              active={activeRoute === 'connect'}
+              isLoading={isProjectPending}
+            />
+          )}
+          {how2Route && (
+            <SideBarNavLink
+              key="how-2"
+              route={how2Route}
+              active={activeRoute === 'how-2'}
+              isLoading={isProjectPending}
+            />
           )}
           {settingsRoutes.map((route, i) => (
             <SideBarNavLink

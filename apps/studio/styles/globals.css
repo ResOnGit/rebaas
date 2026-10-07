@@ -479,3 +479,46 @@ b {
   --brand-300: 292deg 68% 82%;
   --brand-200: 292deg 72% 92%;
 }
+
+/* Keep nav icons one size. Only the logo and labels change when the sidebar opens. */
+.rebaas-sidebar [data-sidebar='menu-button'] {
+  height: 2.5rem !important;
+  width: 100% !important;
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+}
+
+.rebaas-sidebar [data-sidebar='menu-button'] svg {
+  width: 2rem !important;
+  height: 2rem !important;
+}
+
+.rebaas-sidebar [data-sidebar='menu-button'] > span {
+  transition: opacity 280ms ease;
+}
+
+.group[data-collapsible='icon'] .rebaas-sidebar [data-sidebar='menu-button'] {
+  justify-content: center !important;
+  gap: 0 !important;
+  overflow: visible !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+}
+
+.group[data-collapsible='icon'] .rebaas-sidebar [data-sidebar='menu-button'] > span {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.group[data-collapsible='icon'] .rebaas-sidebar [data-sidebar='content'] {
+  overflow-x: visible;
+}
+
+.group[data-collapsible='icon'] .rebaas-sidebar [data-sidebar='group'] {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}

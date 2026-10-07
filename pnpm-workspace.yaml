@@ -1,8 +1,8 @@
 packages:
-  - apps/*
+  - apps/studio
   - packages/*
-  - blocks/*
-  - e2e/*
+  - e2e/studio
+  - e2e/shared
 
 blockExoticSubdeps: true
 engineStrict: true

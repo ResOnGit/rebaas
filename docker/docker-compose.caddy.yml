@@ -1,16 +1,19 @@
+# REBAAS — Caddy TLS reverse proxy (optional override)
+#
+# Exposes 80/443 on the host. api-gw is no longer published on :8000 (internal only).
+# Enable permanently:
+#   sh run.sh config add caddy
+#   # sets COMPOSE_FILE=docker-compose.yml:docker-compose.caddy.yml in .env
+#
+# Requires PROXY_DOMAIN in .env (DNS A/AAAA → this server).
+
 services:
 
-  # Caddy terminates TLS and forwards to the API gateway (api-gw) on port 8000,
-  # so the gateway's own host port binding is removed here. This works for
-  # either gateway, since the service is named api-gw in both cases.
   api-gw:
     ports: !reset []
-    # When using the Kong override uncomment the following:
-    #environment:
-    #  KONG_PORT_MAPS: "443:8000,443:8443"
 
   caddy:
-    container_name: supabase-caddy
+    container_name: rebaas-caddy
     image: caddy:2
     restart: unless-stopped
     ports:

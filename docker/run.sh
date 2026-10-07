@@ -29,6 +29,8 @@
 #   sh run.sh config remove <name>   # remove an override from COMPOSE_FILE in .env
 #   sh run.sh compose-config         # dump fully-resolved docker compose config
 #   sh run.sh secrets                # print key passwords and API keys from .env
+#   sh run.sh backup [--keep <days>] # REBAAS Postgres + .env archive (see BACKUPS.md)
+#   sh run.sh restore <archive.tar.gz> [--replace-env]
 #
 
 set -e
@@ -263,6 +265,12 @@ case "$CMD" in
         done
         echo ""
         ;;
+    backup)
+        exec sh "$(dirname "$0")/rebaas-backup.sh" "$@"
+        ;;
+    restore)
+        exec sh "$(dirname "$0")/rebaas-restore.sh" "$@"
+        ;;
     help|-h|--help)
         cat <<EOF
 Usage: $(basename "$0") <command>
@@ -286,6 +294,9 @@ Commands:
   config remove <name>  Remove an override from COMPOSE_FILE in .env
   compose-config        Dump the fully-resolved docker compose config
   secrets               Show key passwords and API keys from .env
+  backup [--keep <days>]  Archive Postgres + .env (see BACKUPS.md)
+  restore <archive.tar.gz> [--replace-env]
+                        Restore database from a backup archive
 
 EOF
         ;;

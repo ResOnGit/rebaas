@@ -1,5 +1,6 @@
 import { useBreakpoint, useFlag, useParams } from 'common'
 import { useRouter } from 'next/router'
+import { AnimatePresence, motion } from 'framer-motion'
 import { CSSProperties, PropsWithChildren, useEffect, useState } from 'react'
 import { ResizablePanel, ResizablePanelGroup, SidebarProvider, usePanelRef } from 'ui'
 import { SkipToContent } from 'ui-patterns/SkipToContent'
@@ -94,9 +95,11 @@ export const DefaultLayout = ({
 
   return (
     <SidebarProvider
-      defaultOpen={!IS_PLATFORM}
+      defaultOpen={false}
       style={
-        !IS_PLATFORM ? ({ '--sidebar-width': '18rem' } as CSSProperties) : undefined
+        !IS_PLATFORM
+          ? ({ '--sidebar-width': '18rem', '--sidebar-width-icon': '5rem' } as CSSProperties)
+          : undefined
       }
     >
       <LayoutSidebarProvider>
@@ -138,7 +141,22 @@ export const DefaultLayout = ({
                     defaultSize={`${contentMaxSizePercentage}`}
                   >
                     <main id="main" tabIndex={-1} className="h-full overflow-y-auto outline-hidden">
-                      {children}
+                      {IS_PLATFORM ? (
+                        children
+                      ) : (
+                        <AnimatePresence mode="wait" initial={false}>
+                          <motion.div
+                            key={router.pathname}
+                            className="h-full"
+                            initial={{ opacity: 0, x: 16 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -12 }}
+                            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                          >
+                            {children}
+                          </motion.div>
+                        </AnimatePresence>
+                      )}
                     </main>
                   </ResizablePanel>
                   <LayoutSidebar

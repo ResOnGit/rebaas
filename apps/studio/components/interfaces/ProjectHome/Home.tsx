@@ -18,6 +18,7 @@ import { useEffect, useRef } from 'react'
 import { cn } from 'ui'
 
 import { AdvisorSection } from './AdvisorSection'
+import { RebaasHomeBoard } from './RebaasHomeBoard'
 import { ConnectSection } from './ConnectSection'
 import { CustomReportSection } from './CustomReportSection'
 import { DEFAULT_SECTION_ORDER, mergeSectionOrder } from './Home.utils'
@@ -111,6 +112,7 @@ export const ProjectHome = () => {
             className={cn(isPaused ? 'h-full flex justify-center p-0!' : 'pb-0')}
           >
             <TopSection />
+            {!IS_PLATFORM && <RebaasHomeBoard />}
           </ScaffoldSection>
         </ScaffoldContainer>
         {!isPaused && (

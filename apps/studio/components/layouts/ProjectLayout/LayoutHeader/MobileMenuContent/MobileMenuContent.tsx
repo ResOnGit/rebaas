@@ -25,6 +25,7 @@ import { ProductMenuBarHeader } from '@/components/layouts/Navigation/ProductMen
 import type { Route } from '@/components/ui/ui.types'
 import { useIsFeatureEnabled } from '@/hooks/misc/useIsFeatureEnabled'
 import { useSelectedProjectQuery } from '@/hooks/misc/useSelectedProject'
+import { IS_PLATFORM } from '@/lib/constants'
 import { getPathnameWithoutQuery, getPathSegment } from '@/lib/pathname.utils'
 
 export interface MobileMenuContentProps {
@@ -99,7 +100,7 @@ export function MobileMenuContent({
   const homeRoute: Route = useMemo(
     () => ({
       key: 'HOME',
-      label: 'Project Overview',
+      label: 'Overview',
       icon: <Home size={ICON_SIZE} strokeWidth={ICON_STROKE_WIDTH} />,
       link: ref ? `/project/${ref}` : undefined,
     }),
@@ -109,12 +110,12 @@ export function MobileMenuContent({
   const allTopLevelRoutes = useMemo(
     () =>
       [
-        homeRoute,
-        ...(connectRoute ? [connectRoute] : []),
-        ...(how2Route ? [how2Route] : []),
+        ...(IS_PLATFORM ? [homeRoute] : []),
         ...toolRoutes,
         ...productRoutes,
         ...otherRoutes,
+        ...(connectRoute ? [connectRoute] : []),
+        ...(how2Route ? [how2Route] : []),
         ...settingsRoutes,
       ],
     [homeRoute, connectRoute, how2Route, toolRoutes, productRoutes, otherRoutes, settingsRoutes]

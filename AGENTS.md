@@ -1,41 +1,30 @@
-# Supabase Monorepo
+# REBAAS monorepo
 
-pnpm 11 + Turborepo monorepo. Requires Node >= 22.13.
+pnpm 11 + Turborepo. Requires Node >= 22.13. This fork keeps **Studio**, shared **packages/**, **docker/**, and Studio E2E only.
 
 ## Structure
 
-| Directory                | Purpose                                                                                                            |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| `apps/studio`            | Supabase Studio/Dashboard — has its own `apps/studio/AGENTS.md` (see below)                                        |
-| `apps/docs`              | Documentation site — Next.js app router, MDX (port 3001, served under `/docs`) — has its own `apps/docs/AGENTS.md` |
-| `apps/www`               | Marketing website — Next.js, app + pages (port 3000)                                                               |
-| `apps/design-system`     | Component demos — source of truth for Studio UI patterns (port 3003)                                               |
-| `apps/ui-library`        | shadcn-style registry site for Supabase UI blocks (port 3004)                                                      |
-| `apps/lite-studio`       | Lightweight Studio — different stack: React Router 7 + Vite + Tailwind v4                                          |
-| `apps/kb`                | Knowledge base — Astro — has its own `apps/kb/AGENTS.md`                                                           |
-| `apps/learn`             | Courses site — Next.js + Contentlayer (port 3007), early stage                                                     |
-| `packages/ui`            | Shared UI components (shadcn/ui based) — `import { Button } from 'ui'`                                             |
-| `packages/ui-patterns`   | Composite components — subpath imports, e.g. `ui-patterns/AssistantChat`                                           |
-| `packages/common`        | Shared utils, telemetry constants, feature flags                                                                   |
-| `packages/api-types`     | Generated platform Management API types                                                                            |
-| `packages/pg-meta`       | SQL builders for Postgres introspection (`SafeSqlFragment`)                                                        |
-| `packages/shared-data`   | Static data: pricing, plans, regions, error codes                                                                  |
-| `e2e/studio`, `e2e/docs` | Playwright E2E tests                                                                                               |
-| `supabase/`              | Local Supabase project: edge functions, migrations, config.toml                                                    |
+| Directory              | Purpose                                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------------- |
+| `apps/studio`          | REBAAS dashboard — see `apps/studio/AGENTS.md`                                           |
+| `packages/*`           | Shared libraries Studio depends on (`ui`, `ui-patterns`, `common`, `api-types`, …)     |
+| `docker/`              | Self-hosted stack and backup scripts — see `docker/BACKUPS.md`                            |
+| `e2e/studio`           | Playwright E2E for Studio (optional)                                                     |
+| `supabase/`            | Local Supabase CLI project (migrations, functions) when using `pnpm setup:cli`           |
+
+Removed from this fork (upstream still has them): `apps/docs`, `www`, `design-system`, `ui-library`, `lite-studio`, `kb`, `learn`, `e2e/docs`, `e2e/www`.
 
 ## Common Commands
 
 ```bash
-pnpm dev:studio              # run Studio dev server → http://localhost:8082
-pnpm dev:docs                # run docs dev server
-pnpm dev:www                 # run www dev server
-pnpm dev:kb                  # run knowledge base dev server
+pnpm dev:studio              # Studio → http://localhost:8082
 pnpm test:studio             # Studio unit tests (vitest)
-pnpm e2e                     # Studio E2E tests (playwright)
-pnpm build --filter=studio   # build Studio
-pnpm lint --filter=studio    # lint Studio
-pnpm typecheck               # typecheck all packages
-pnpm format                  # Prettier write (check: pnpm test:prettier)
+pnpm e2e                     # Studio E2E (playwright)
+pnpm build:studio            # build Studio
+pnpm build:studio:docker     # production Docker image → rebaas-studio:local
+pnpm lint                    # lint Studio
+pnpm typecheck               # typecheck Studio + workspace dependencies
+pnpm format                  # Prettier (studio, packages, docker)
 pnpm generate:types          # local DB types → supabase/functions/common/database-types.ts
 pnpm api:codegen             # platform Management API types → packages/api-types
 ```

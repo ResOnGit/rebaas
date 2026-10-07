@@ -261,64 +261,26 @@ resources:
                       - name: functions-v1-all
                         match:
                           prefix: /functions/v1/
-                        route:
-                          cluster: functions
-                          prefix_rewrite: /
-                          # Allow the runtime's 400s wall clock to expire first.
-                          timeout: 410s
-                          # Limit inactivity, matching Kong's read_timeout.
-                          idle_timeout: 160s
-                        request_headers_to_add:
-                          - header:
-                              key: X-Forwarded-Prefix
-                              value: /functions/v1/
-                            append_action: ADD_IF_ABSENT
-                        typed_per_filter_config:
-                          envoy.filters.http.basic_auth:
-                            '@type': >-
-                              type.googleapis.com/envoy.config.route.v3.FilterConfig
-                            disabled: true
-                          envoy.filters.http.rbac:
-                            '@type': >-
-                              type.googleapis.com/envoy.extensions.filters.http.rbac.v3.RBACPerRoute
-                            rbac:
-                              rules:
-                                action: ALLOW
-                                policies:
-                                  allow_all:
-                                    permissions:
-                                      - any: true
-                                    principals:
-                                      - any: true
+                        direct_response:
+                          status: 404
+                          body:
+                            inline_string: '{"message":"Edge Functions are not enabled on REBAAS"}'
 
-                      - match:
+                      - name: rebaas-storage-disabled
+                        match:
                           prefix: /storage/v1/
-                        route:
-                          cluster: storage
-                          prefix_rewrite: /
-                          timeout: 30s
-                        request_headers_to_add:
-                          - header:
-                              key: X-Forwarded-Prefix
-                              value: /storage/v1
-                            append_action: ADD_IF_ABSENT
-                        typed_per_filter_config:
-                          envoy.filters.http.basic_auth:
-                            '@type': >-
-                              type.googleapis.com/envoy.config.route.v3.FilterConfig
-                            disabled: true
-                          envoy.filters.http.rbac:
-                            '@type': >-
-                              type.googleapis.com/envoy.extensions.filters.http.rbac.v3.RBACPerRoute
-                            rbac:
-                              rules:
-                                action: ALLOW
-                                policies:
-                                  allow_all:
-                                    permissions:
-                                      - any: true
-                                    principals:
-                                      - any: true
+                        direct_response:
+                          status: 404
+                          body:
+                            inline_string: '{"message":"Storage is not enabled on REBAAS"}'
+
+                      - name: rebaas-realtime-disabled
+                        match:
+                          prefix: /realtime/v1/
+                        direct_response:
+                          status: 404
+                          body:
+                            inline_string: '{"message":"Realtime is not enabled on REBAAS"}'
 
                       - name: auth-v1-protected
                         match:
@@ -406,102 +368,6 @@ resources:
                           - header:
                               key: Content-Profile
                               value: graphql_public
-                            append_action: ADD_IF_ABSENT
-                        typed_per_filter_config:
-                          envoy.filters.http.basic_auth:
-                            '@type': >-
-                              type.googleapis.com/envoy.config.route.v3.FilterConfig
-                            disabled: true
-
-                      - name: realtime-v1-api-openapi-blocked
-                        match:
-                          prefix: /realtime/v1/api/openapi
-                        route:
-                          cluster: realtime
-                          timeout: 30s
-                        request_headers_to_add:
-                          - header:
-                              key: X-Forwarded-Prefix
-                              value: /realtime/v1/api/openapi
-                            append_action: ADD_IF_ABSENT
-                        typed_per_filter_config:
-                          envoy.filters.http.basic_auth:
-                            '@type': >-
-                              type.googleapis.com/envoy.config.route.v3.FilterConfig
-                            disabled: true
-                          envoy.filters.http.rbac:
-                            '@type': >-
-                              type.googleapis.com/envoy.extensions.filters.http.rbac.v3.RBACPerRoute
-                            rbac:
-                              rules:
-                                action: DENY
-                                policies:
-                                  deny_all:
-                                    permissions:
-                                      - any: true
-                                    principals:
-                                      - any: true
-
-                      - name: realtime-v1-api-tenants-blocked
-                        match:
-                          prefix: /realtime/v1/api/tenants
-                        route:
-                          cluster: realtime
-                          timeout: 30s
-                        request_headers_to_add:
-                          - header:
-                              key: X-Forwarded-Prefix
-                              value: /realtime/v1/api/tenants
-                            append_action: ADD_IF_ABSENT
-                        typed_per_filter_config:
-                          envoy.filters.http.basic_auth:
-                            '@type': >-
-                              type.googleapis.com/envoy.config.route.v3.FilterConfig
-                            disabled: true
-                          envoy.filters.http.rbac:
-                            '@type': >-
-                              type.googleapis.com/envoy.extensions.filters.http.rbac.v3.RBACPerRoute
-                            rbac:
-                              rules:
-                                action: DENY
-                                policies:
-                                  deny_all:
-                                    permissions:
-                                      - any: true
-                                    principals:
-                                      - any: true
-
-                      - name: realtime-v1-api-protected
-                        match:
-                          prefix: /realtime/v1/api
-                        route:
-                          cluster: realtime
-                          prefix_rewrite: /api
-                          timeout: 30s
-                          host_rewrite_literal: realtime-dev.supabase-realtime
-                        request_headers_to_add:
-                          - header:
-                              key: X-Forwarded-Prefix
-                              value: /realtime/v1/api
-                            append_action: ADD_IF_ABSENT
-                        typed_per_filter_config:
-                          envoy.filters.http.basic_auth:
-                            '@type': >-
-                              type.googleapis.com/envoy.config.route.v3.FilterConfig
-                            disabled: true
-
-                      - name: realtime-v1-ws-protected
-                        match:
-                          prefix: /realtime/v1/
-                        route:
-                          cluster: realtime
-                          prefix_rewrite: /socket/
-                          timeout: 30s
-                          host_rewrite_literal: realtime-dev.supabase-realtime
-                        request_headers_to_add:
-                          - header:
-                              key: X-Forwarded-Prefix
-                              value: /realtime/v1/
                             append_action: ADD_IF_ABSENT
                         typed_per_filter_config:
                           envoy.filters.http.basic_auth:
@@ -719,8 +585,6 @@ resources:
                         ["rest-v1-openapi-protected"] = true,
                         ["rest-v1-protected"] = true,
                         ["graphql-v1-protected"] = true,
-                        ["realtime-v1-api-protected"] = true,
-                        ["realtime-v1-ws-protected"] = true,
                         ["pg-protected"] = true,
                       }
 
@@ -1173,12 +1037,6 @@ resources:
                             - url_path:
                                 path:
                                   prefix: /rest/v1/
-                            - url_path:
-                                path:
-                                  prefix: /realtime/v1/api
-                            - url_path:
-                                path:
-                                  prefix: /realtime/v1/
                             - url_path:
                                 path:
                                   prefix: /graphql/v1

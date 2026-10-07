@@ -211,7 +211,7 @@ const Sidebar = React.forwardRef<
       <div
         ref={ref}
         className={cn(
-          overflowing ? 'w-12' : '',
+          overflowing ? 'w-(--sidebar-width-icon)' : '',
           'relative group peer text-sidebar-foreground',
           disableMobileSheet ? 'flex' : 'hidden md:block',
           'shrink-0'
@@ -225,7 +225,7 @@ const Sidebar = React.forwardRef<
         <div
           className={cn(
             overflowing ? 'absolute top-0' : 'relative',
-            'duration-100 h-full w-(--sidebar-width) bg-transparent transition-[width] ease-linear',
+            'duration-300 h-full w-(--sidebar-width) bg-transparent transition-[width] ease-out',
             'group-data-[collapsible=offcanvas]:w-0',
             'group-data-[side=right]:rotate-180',
             variant === 'floating' || variant === 'inset'
@@ -237,7 +237,7 @@ const Sidebar = React.forwardRef<
           className={cn(
             'absolute top-0 h-full', // sidebar custom changes - We have also removed 'fixed', and 'h-svh'
             //
-            'duration-100 inset-y-0 z-10 w-(--sidebar-width) transition-[left,right,width] ease-linear',
+            'duration-300 inset-y-0 z-10 w-(--sidebar-width) transition-[left,right,width] ease-out',
             disableMobileSheet ? 'flex' : 'hidden md:flex',
             side === 'left'
               ? 'left-0 group-data-[collapsible=offcanvas]:-left-(--sidebar-width)'

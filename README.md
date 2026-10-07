@@ -4,7 +4,7 @@
 
 # REBAAS
 
-REBAAS (Res Backend-as-a-Service) is a self-hosted backend for the Revits apps. It is a modified [Supabase](https://github.com/supabase/supabase) Studio and stack: one Postgres database, one dashboard, and one API. Each warung or app is a schema inside that database, not a separate cloud project.
+REBAAS  is a self-hosted backend for the Revits apps. It is a modified [Supabase](https://github.com/supabase/supabase) Studio and stack: one Postgres database, one dashboard, and one API. Each warung or app is a schema inside that database, not a separate cloud project.
 
 - [x] Postgres database. [Docs](https://supabase.com/docs/guides/database)
 - [x] Authentication (GoTrue), including email one-time passwords. [Docs](https://supabase.com/docs/guides/auth)
@@ -42,7 +42,10 @@ REBAAS is one toolbox pointed at one database. Apps share the API URL and keys. 
 | `apps/studio` | REBAAS dashboard |
 | `packages/` | Shared libraries Studio still needs |
 | `docker/` | Self-hosted stack |
+| `docker/DEPLOY.md` | Build Studio image, `.env`, direct `:8000` or **Caddy** HTTPS |
+| `docker/BACKUPS.md` | Backup and restore (`sh run.sh backup` / `restore`) |
 | `resnotes/` | Private notes. Not part of the product |
+| `MONOREPO.md` | What was trimmed from upstream and how to install after pull |
 
 #### Client
 

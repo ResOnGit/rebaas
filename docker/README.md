@@ -5,9 +5,11 @@
 
 </div>
 
-# Self-Hosted Supabase with Docker
+# REBAAS Docker stack
 
-This is the official Docker Compose setup for self-hosted Supabase. It provides a complete stack with all Supabase services running locally or on your infrastructure.
+This folder is the **trimmed** self-hosted stack for REBAAS: Postgres, GoTrue, PostgREST, Envoy, postgres-meta, and **your** Studio image (`rebaas-studio:local`). See [DEPLOY.md](./DEPLOY.md) to build Studio and start the stack.
+
+The text below is largely upstream Supabase documentation; ignore services that are no longer in `docker-compose.yml` (Realtime, Storage, Edge Functions, Supavisor).
 
 ## Getting Started
 

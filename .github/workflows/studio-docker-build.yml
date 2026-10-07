@@ -32,8 +32,6 @@ jobs:
             studio:
               - 'packages/pg-meta/**'
               - 'apps/studio/**'
-              - 'apps/ui-library/**'
-              - 'apps/design-system/**'
               - 'e2e/studio/**'
               - 'pnpm-lock.yaml'
               - '.github/workflows/studio-e2e-test.yml'

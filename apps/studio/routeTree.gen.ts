@@ -93,13 +93,14 @@ import { Route as ProjectRefSqlIndexRouteImport } from './routes/project/$ref/sq
 import { Route as ProjectRefObservabilityIndexRouteImport } from './routes/project/$ref/observability/index'
 import { Route as ProjectRefLogsIndexRouteImport } from './routes/project/$ref/logs/index'
 import { Route as ProjectRefIntegrationsIndexRouteImport } from './routes/project/$ref/integrations/index'
+import { Route as ProjectRefHow2IndexRouteImport } from './routes/project/$ref/how-2/index'
 import { Route as ProjectRefFunctionsIndexRouteImport } from './routes/project/$ref/functions/index'
 import { Route as ProjectRefExplorerIndexRouteImport } from './routes/project/$ref/explorer/index'
 import { Route as ProjectRefEditorIndexRouteImport } from './routes/project/$ref/editor/index'
 import { Route as ProjectRefConnectIndexRouteImport } from './routes/project/$ref/connect/index'
-import { Route as ProjectRefHow2IndexRouteImport } from './routes/project/$ref/how-2/index'
 import { Route as ProjectRefComputeIndexRouteImport } from './routes/project/$ref/compute/index'
 import { Route as ProjectRefBranchesIndexRouteImport } from './routes/project/$ref/branches/index'
+import { Route as ProjectRefBackupsIndexRouteImport } from './routes/project/$ref/backups/index'
 import { Route as ProjectRefApiIndexRouteImport } from './routes/project/$ref/api/index'
 import { Route as ApiPlatformProjectsIndexRouteImport } from './routes/api/platform/projects/index'
 import { Route as ApiPlatformProfileIndexRouteImport } from './routes/api/platform/profile/index'
@@ -262,6 +263,7 @@ import { Route as ApiV1ProjectsRefApiKeysRouteImport } from './routes/api/v1/pro
 import { Route as ApiPlatformPropsOrgSlugRouteImport } from './routes/api/platform/props/org/$slug'
 import { Route as ApiPlatformProjectsRefSettingsRouteImport } from './routes/api/platform/projects/$ref/settings'
 import { Route as ApiPlatformProjectsRefRunLintsRouteImport } from './routes/api/platform/projects/$ref/run-lints'
+import { Route as ApiPlatformProjectsRefRebaasStatusRouteImport } from './routes/api/platform/projects/$ref/rebaas-status'
 import { Route as ApiPlatformProjectsRefInfraMonitoringRouteImport } from './routes/api/platform/projects/$ref/infra-monitoring'
 import { Route as ApiPlatformProjectsRefDatabasesRouteImport } from './routes/api/platform/projects/$ref/databases'
 import { Route as ApiPlatformPgMetaRefViewsRouteImport } from './routes/api/platform/pg-meta/$ref/views'
@@ -765,6 +767,11 @@ const ProjectRefIntegrationsIndexRoute =
     path: '/',
     getParentRoute: () => ProjectRefIntegrationsRoute,
   } as any)
+const ProjectRefHow2IndexRoute = ProjectRefHow2IndexRouteImport.update({
+  id: '/how-2/',
+  path: '/how-2/',
+  getParentRoute: () => ProjectRefRoute,
+} as any)
 const ProjectRefFunctionsIndexRoute =
   ProjectRefFunctionsIndexRouteImport.update({
     id: '/',
@@ -786,11 +793,6 @@ const ProjectRefConnectIndexRoute = ProjectRefConnectIndexRouteImport.update({
   path: '/connect/',
   getParentRoute: () => ProjectRefRoute,
 } as any)
-const ProjectRefHow2IndexRoute = ProjectRefHow2IndexRouteImport.update({
-  id: '/how-2/',
-  path: '/how-2/',
-  getParentRoute: () => ProjectRefRoute,
-} as any)
 const ProjectRefComputeIndexRoute = ProjectRefComputeIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -800,6 +802,11 @@ const ProjectRefBranchesIndexRoute = ProjectRefBranchesIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ProjectRefBranchesRoute,
+} as any)
+const ProjectRefBackupsIndexRoute = ProjectRefBackupsIndexRouteImport.update({
+  id: '/backups/',
+  path: '/backups/',
+  getParentRoute: () => ProjectRefRoute,
 } as any)
 const ProjectRefApiIndexRoute = ProjectRefApiIndexRouteImport.update({
   id: '/api/',
@@ -1719,6 +1726,12 @@ const ApiPlatformProjectsRefRunLintsRoute =
     path: '/api/platform/projects/$ref/run-lints',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPlatformProjectsRefRebaasStatusRoute =
+  ApiPlatformProjectsRefRebaasStatusRouteImport.update({
+    id: '/api/platform/projects/$ref/rebaas-status',
+    path: '/api/platform/projects/$ref/rebaas-status',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPlatformProjectsRefInfraMonitoringRoute =
   ApiPlatformProjectsRefInfraMonitoringRouteImport.update({
     id: '/api/platform/projects/$ref/infra-monitoring',
@@ -2347,13 +2360,14 @@ export interface FileRoutesByFullPath {
   '/api/platform/profile/': typeof ApiPlatformProfileIndexRoute
   '/api/platform/projects/': typeof ApiPlatformProjectsIndexRoute
   '/project/$ref/api/': typeof ProjectRefApiIndexRoute
+  '/project/$ref/backups/': typeof ProjectRefBackupsIndexRoute
   '/project/$ref/branches/': typeof ProjectRefBranchesIndexRoute
   '/project/$ref/compute/': typeof ProjectRefComputeIndexRoute
   '/project/$ref/connect/': typeof ProjectRefConnectIndexRoute
-  '/project/$ref/how-2/': typeof ProjectRefHow2IndexRoute
   '/project/$ref/editor/': typeof ProjectRefEditorIndexRoute
   '/project/$ref/explorer/': typeof ProjectRefExplorerIndexRoute
   '/project/$ref/functions/': typeof ProjectRefFunctionsIndexRoute
+  '/project/$ref/how-2/': typeof ProjectRefHow2IndexRoute
   '/project/$ref/integrations/': typeof ProjectRefIntegrationsIndexRoute
   '/project/$ref/logs/': typeof ProjectRefLogsIndexRoute
   '/project/$ref/observability/': typeof ProjectRefObservabilityIndexRoute
@@ -2380,6 +2394,7 @@ export interface FileRoutesByFullPath {
   '/api/platform/pg-meta/$ref/views': typeof ApiPlatformPgMetaRefViewsRoute
   '/api/platform/projects/$ref/databases': typeof ApiPlatformProjectsRefDatabasesRoute
   '/api/platform/projects/$ref/infra-monitoring': typeof ApiPlatformProjectsRefInfraMonitoringRoute
+  '/api/platform/projects/$ref/rebaas-status': typeof ApiPlatformProjectsRefRebaasStatusRoute
   '/api/platform/projects/$ref/run-lints': typeof ApiPlatformProjectsRefRunLintsRoute
   '/api/platform/projects/$ref/settings': typeof ApiPlatformProjectsRefSettingsRoute
   '/api/platform/props/org/$slug': typeof ApiPlatformPropsOrgSlugRoute
@@ -2658,13 +2673,14 @@ export interface FileRoutesByTo {
   '/api/platform/profile': typeof ApiPlatformProfileIndexRoute
   '/api/platform/projects': typeof ApiPlatformProjectsIndexRoute
   '/project/$ref/api': typeof ProjectRefApiIndexRoute
+  '/project/$ref/backups': typeof ProjectRefBackupsIndexRoute
   '/project/$ref/branches': typeof ProjectRefBranchesIndexRoute
   '/project/$ref/compute': typeof ProjectRefComputeIndexRoute
   '/project/$ref/connect': typeof ProjectRefConnectIndexRoute
-  '/project/$ref/how-2': typeof ProjectRefHow2IndexRoute
   '/project/$ref/editor': typeof ProjectRefEditorIndexRoute
   '/project/$ref/explorer': typeof ProjectRefExplorerIndexRoute
   '/project/$ref/functions': typeof ProjectRefFunctionsIndexRoute
+  '/project/$ref/how-2': typeof ProjectRefHow2IndexRoute
   '/project/$ref/integrations': typeof ProjectRefIntegrationsIndexRoute
   '/project/$ref/logs': typeof ProjectRefLogsIndexRoute
   '/project/$ref/observability': typeof ProjectRefObservabilityIndexRoute
@@ -2691,6 +2707,7 @@ export interface FileRoutesByTo {
   '/api/platform/pg-meta/$ref/views': typeof ApiPlatformPgMetaRefViewsRoute
   '/api/platform/projects/$ref/databases': typeof ApiPlatformProjectsRefDatabasesRoute
   '/api/platform/projects/$ref/infra-monitoring': typeof ApiPlatformProjectsRefInfraMonitoringRoute
+  '/api/platform/projects/$ref/rebaas-status': typeof ApiPlatformProjectsRefRebaasStatusRoute
   '/api/platform/projects/$ref/run-lints': typeof ApiPlatformProjectsRefRunLintsRoute
   '/api/platform/projects/$ref/settings': typeof ApiPlatformProjectsRefSettingsRoute
   '/api/platform/props/org/$slug': typeof ApiPlatformPropsOrgSlugRoute
@@ -2987,13 +3004,14 @@ export interface FileRoutesById {
   '/api/platform/profile/': typeof ApiPlatformProfileIndexRoute
   '/api/platform/projects/': typeof ApiPlatformProjectsIndexRoute
   '/project/$ref/api/': typeof ProjectRefApiIndexRoute
+  '/project/$ref/backups/': typeof ProjectRefBackupsIndexRoute
   '/project/$ref/branches/': typeof ProjectRefBranchesIndexRoute
   '/project/$ref/compute/': typeof ProjectRefComputeIndexRoute
   '/project/$ref/connect/': typeof ProjectRefConnectIndexRoute
-  '/project/$ref/how-2/': typeof ProjectRefHow2IndexRoute
   '/project/$ref/editor/': typeof ProjectRefEditorIndexRoute
   '/project/$ref/explorer/': typeof ProjectRefExplorerIndexRoute
   '/project/$ref/functions/': typeof ProjectRefFunctionsIndexRoute
+  '/project/$ref/how-2/': typeof ProjectRefHow2IndexRoute
   '/project/$ref/integrations/': typeof ProjectRefIntegrationsIndexRoute
   '/project/$ref/logs/': typeof ProjectRefLogsIndexRoute
   '/project/$ref/observability/': typeof ProjectRefObservabilityIndexRoute
@@ -3020,6 +3038,7 @@ export interface FileRoutesById {
   '/api/platform/pg-meta/$ref/views': typeof ApiPlatformPgMetaRefViewsRoute
   '/api/platform/projects/$ref/databases': typeof ApiPlatformProjectsRefDatabasesRoute
   '/api/platform/projects/$ref/infra-monitoring': typeof ApiPlatformProjectsRefInfraMonitoringRoute
+  '/api/platform/projects/$ref/rebaas-status': typeof ApiPlatformProjectsRefRebaasStatusRoute
   '/api/platform/projects/$ref/run-lints': typeof ApiPlatformProjectsRefRunLintsRoute
   '/api/platform/projects/$ref/settings': typeof ApiPlatformProjectsRefSettingsRoute
   '/api/platform/props/org/$slug': typeof ApiPlatformPropsOrgSlugRoute
@@ -3315,13 +3334,14 @@ export interface FileRouteTypes {
     | '/api/platform/profile/'
     | '/api/platform/projects/'
     | '/project/$ref/api/'
+    | '/project/$ref/backups/'
     | '/project/$ref/branches/'
     | '/project/$ref/compute/'
     | '/project/$ref/connect/'
-    | '/project/$ref/how-2/'
     | '/project/$ref/editor/'
     | '/project/$ref/explorer/'
     | '/project/$ref/functions/'
+    | '/project/$ref/how-2/'
     | '/project/$ref/integrations/'
     | '/project/$ref/logs/'
     | '/project/$ref/observability/'
@@ -3348,6 +3368,7 @@ export interface FileRouteTypes {
     | '/api/platform/pg-meta/$ref/views'
     | '/api/platform/projects/$ref/databases'
     | '/api/platform/projects/$ref/infra-monitoring'
+    | '/api/platform/projects/$ref/rebaas-status'
     | '/api/platform/projects/$ref/run-lints'
     | '/api/platform/projects/$ref/settings'
     | '/api/platform/props/org/$slug'
@@ -3626,13 +3647,14 @@ export interface FileRouteTypes {
     | '/api/platform/profile'
     | '/api/platform/projects'
     | '/project/$ref/api'
+    | '/project/$ref/backups'
     | '/project/$ref/branches'
     | '/project/$ref/compute'
     | '/project/$ref/connect'
-    | '/project/$ref/how-2'
     | '/project/$ref/editor'
     | '/project/$ref/explorer'
     | '/project/$ref/functions'
+    | '/project/$ref/how-2'
     | '/project/$ref/integrations'
     | '/project/$ref/logs'
     | '/project/$ref/observability'
@@ -3659,6 +3681,7 @@ export interface FileRouteTypes {
     | '/api/platform/pg-meta/$ref/views'
     | '/api/platform/projects/$ref/databases'
     | '/api/platform/projects/$ref/infra-monitoring'
+    | '/api/platform/projects/$ref/rebaas-status'
     | '/api/platform/projects/$ref/run-lints'
     | '/api/platform/projects/$ref/settings'
     | '/api/platform/props/org/$slug'
@@ -3954,13 +3977,14 @@ export interface FileRouteTypes {
     | '/api/platform/profile/'
     | '/api/platform/projects/'
     | '/project/$ref/api/'
+    | '/project/$ref/backups/'
     | '/project/$ref/branches/'
     | '/project/$ref/compute/'
     | '/project/$ref/connect/'
-    | '/project/$ref/how-2/'
     | '/project/$ref/editor/'
     | '/project/$ref/explorer/'
     | '/project/$ref/functions/'
+    | '/project/$ref/how-2/'
     | '/project/$ref/integrations/'
     | '/project/$ref/logs/'
     | '/project/$ref/observability/'
@@ -3987,6 +4011,7 @@ export interface FileRouteTypes {
     | '/api/platform/pg-meta/$ref/views'
     | '/api/platform/projects/$ref/databases'
     | '/api/platform/projects/$ref/infra-monitoring'
+    | '/api/platform/projects/$ref/rebaas-status'
     | '/api/platform/projects/$ref/run-lints'
     | '/api/platform/projects/$ref/settings'
     | '/api/platform/props/org/$slug'
@@ -4168,6 +4193,7 @@ export interface RootRouteChildren {
   ApiPlatformPgMetaRefViewsRoute: typeof ApiPlatformPgMetaRefViewsRoute
   ApiPlatformProjectsRefDatabasesRoute: typeof ApiPlatformProjectsRefDatabasesRoute
   ApiPlatformProjectsRefInfraMonitoringRoute: typeof ApiPlatformProjectsRefInfraMonitoringRoute
+  ApiPlatformProjectsRefRebaasStatusRoute: typeof ApiPlatformProjectsRefRebaasStatusRoute
   ApiPlatformProjectsRefRunLintsRoute: typeof ApiPlatformProjectsRefRunLintsRoute
   ApiPlatformProjectsRefSettingsRoute: typeof ApiPlatformProjectsRefSettingsRoute
   ApiPlatformPropsOrgSlugRoute: typeof ApiPlatformPropsOrgSlugRoute
@@ -4808,6 +4834,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectRefIntegrationsIndexRouteImport
       parentRoute: typeof ProjectRefIntegrationsRoute
     }
+    '/project/$ref/how-2/': {
+      id: '/project/$ref/how-2/'
+      path: '/how-2'
+      fullPath: '/project/$ref/how-2/'
+      preLoaderRoute: typeof ProjectRefHow2IndexRouteImport
+      parentRoute: typeof ProjectRefRoute
+    }
     '/project/$ref/functions/': {
       id: '/project/$ref/functions/'
       path: '/'
@@ -4836,13 +4869,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectRefConnectIndexRouteImport
       parentRoute: typeof ProjectRefRoute
     }
-    '/project/$ref/how-2/': {
-      id: '/project/$ref/how-2/'
-      path: '/how-2'
-      fullPath: '/project/$ref/how-2/'
-      preLoaderRoute: typeof ProjectRefHow2IndexRouteImport
-      parentRoute: typeof ProjectRefRoute
-    }
     '/project/$ref/compute/': {
       id: '/project/$ref/compute/'
       path: '/'
@@ -4856,6 +4882,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/project/$ref/branches/'
       preLoaderRoute: typeof ProjectRefBranchesIndexRouteImport
       parentRoute: typeof ProjectRefBranchesRoute
+    }
+    '/project/$ref/backups/': {
+      id: '/project/$ref/backups/'
+      path: '/backups'
+      fullPath: '/project/$ref/backups/'
+      preLoaderRoute: typeof ProjectRefBackupsIndexRouteImport
+      parentRoute: typeof ProjectRefRoute
     }
     '/project/$ref/api/': {
       id: '/project/$ref/api/'
@@ -5989,6 +6022,13 @@ declare module '@tanstack/react-router' {
       path: '/api/platform/projects/$ref/run-lints'
       fullPath: '/api/platform/projects/$ref/run-lints'
       preLoaderRoute: typeof ApiPlatformProjectsRefRunLintsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/platform/projects/$ref/rebaas-status': {
+      id: '/api/platform/projects/$ref/rebaas-status'
+      path: '/api/platform/projects/$ref/rebaas-status'
+      fullPath: '/api/platform/projects/$ref/rebaas-status'
+      preLoaderRoute: typeof ApiPlatformProjectsRefRebaasStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/platform/projects/$ref/infra-monitoring': {
@@ -7172,6 +7212,7 @@ interface ProjectRefRouteChildren {
   ProjectRefStorageRoute: typeof ProjectRefStorageRouteWithChildren
   ProjectRefIndexRoute: typeof ProjectRefIndexRoute
   ProjectRefApiIndexRoute: typeof ProjectRefApiIndexRoute
+  ProjectRefBackupsIndexRoute: typeof ProjectRefBackupsIndexRoute
   ProjectRefConnectIndexRoute: typeof ProjectRefConnectIndexRoute
   ProjectRefHow2IndexRoute: typeof ProjectRefHow2IndexRoute
 }
@@ -7195,6 +7236,7 @@ const ProjectRefRouteChildren: ProjectRefRouteChildren = {
   ProjectRefStorageRoute: ProjectRefStorageRouteWithChildren,
   ProjectRefIndexRoute: ProjectRefIndexRoute,
   ProjectRefApiIndexRoute: ProjectRefApiIndexRoute,
+  ProjectRefBackupsIndexRoute: ProjectRefBackupsIndexRoute,
   ProjectRefConnectIndexRoute: ProjectRefConnectIndexRoute,
   ProjectRefHow2IndexRoute: ProjectRefHow2IndexRoute,
 }
@@ -7327,6 +7369,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPlatformProjectsRefDatabasesRoute: ApiPlatformProjectsRefDatabasesRoute,
   ApiPlatformProjectsRefInfraMonitoringRoute:
     ApiPlatformProjectsRefInfraMonitoringRoute,
+  ApiPlatformProjectsRefRebaasStatusRoute:
+    ApiPlatformProjectsRefRebaasStatusRoute,
   ApiPlatformProjectsRefRunLintsRoute: ApiPlatformProjectsRefRunLintsRoute,
   ApiPlatformProjectsRefSettingsRoute: ApiPlatformProjectsRefSettingsRoute,
   ApiPlatformPropsOrgSlugRoute: ApiPlatformPropsOrgSlugRoute,
