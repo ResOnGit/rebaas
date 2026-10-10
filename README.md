@@ -44,7 +44,6 @@ REBAAS is one toolbox pointed at one database. Apps share the API URL and keys. 
 | `docker/` | Self-hosted stack |
 | `docker/DEPLOY.md` | Build Studio image, `.env`, direct `:8000` or **Caddy** HTTPS |
 | `docker/BACKUPS.md` | Backup and restore (`sh run.sh backup` / `restore`) |
-| `resnotes/` | Private notes. Not part of the product |
 | `MONOREPO.md` | What was trimmed from upstream and how to install after pull |
 
 #### Client
